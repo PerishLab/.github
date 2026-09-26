@@ -1,0 +1,50 @@
+name: Task
+description: Record one bounded operational or maintenance result.
+type: Task
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this type when the outcome does not introduce product behavior and is not a defect repair.
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Outcome
+      description: What single observable result will be true when this issue closes?
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What exact system, repository, or operation is included?
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance
+      description: List the evidence that will make completion decidable.
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
+  - type: textarea
+    id: non_goals
+    attributes:
+      label: Non-goals
+      description: State adjacent work that this task deliberately does not absorb.
+    validations:
+      required: true
+  - type: input
+    id: concord_lineage
+    attributes:
+      label: Concord lineage
+      description: Optional stable Task identity, for example perish.code/task-name.
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: |
+        After creation, use GitHub Relationships for parent, sub-issue, blocked-by, and blocking edges. Do not encode those relationships as labels.

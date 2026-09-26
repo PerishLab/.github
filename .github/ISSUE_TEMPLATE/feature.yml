@@ -1,0 +1,50 @@
+name: Feature
+description: Propose one observable product outcome.
+type: Feature
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Keep this issue independently deliverable. Use sub-issues for a larger outcome and native dependencies for exact blocking relationships.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What concrete gap or pressure requires a product change?
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Outcome
+      description: What single observable result will be true when this issue closes?
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance
+      description: List the evidence or behaviors that make the outcome decidable.
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
+  - type: textarea
+    id: non_goals
+    attributes:
+      label: Non-goals
+      description: State adjacent work that this issue deliberately does not absorb.
+    validations:
+      required: true
+  - type: input
+    id: concord_lineage
+    attributes:
+      label: Concord lineage
+      description: Optional stable Task identity, for example perish.code/task-name.
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: |
+        After creation, use GitHub Relationships for parent, sub-issue, blocked-by, and blocking edges. Do not encode those relationships as labels.
