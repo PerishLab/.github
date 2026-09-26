@@ -1,4 +1,5 @@
-<!-- Add exactly one native closing reference, for example: Closes #123. -->
+<!-- Add exactly one native non-closing reference, for example: Refs #123. -->
+<!-- Use Closes only when every issue acceptance condition is true at merge. -->
 
 ## Outcome
 
@@ -15,5 +16,7 @@
 ## Boundary
 
 - [ ] This pull request delivers one leaf issue.
-- [ ] Its closing reference resolves to that issue.
+- [ ] Its native reference resolves to that issue.
+- [ ] A closing reference is used only if no acceptance remains after merge.
+- [ ] Release-dependent acceptance remains open for Wharf distribution evidence.
 - [ ] Adjacent work remains outside this change.
