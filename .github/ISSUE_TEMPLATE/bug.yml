@@ -31,7 +31,7 @@ body:
     id: acceptance
     attributes:
       label: Acceptance
-      description: List the regression evidence that will prove the repair.
+      description: List every condition required to close the issue, including any post-merge or stable-release evidence.
       placeholder: |
         - [ ] ...
         - [ ] ...
