@@ -45,10 +45,10 @@ body:
     validations:
       required: true
   - type: input
-    id: concord_lineage
+    id: legacy_concord_lineage
     attributes:
-      label: Concord lineage
-      description: Optional stable Task identity, for example perish.code/task-name.
+      label: Legacy Concord lineage
+      description: Migration only. Name an existing v0.13 Task identity; leave empty for new work.
     validations:
       required: false
   - type: markdown

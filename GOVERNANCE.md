@@ -1,10 +1,17 @@
 # Delivery governance
 
-PerishLab uses issues as the public unit of bounded product work and pull
-requests as the delivery projection of one such unit. The issue is the sole
-public narrative authority for that outcome and its acceptance. Concord remains
-the authority for estate-wide execution state, dependencies, Members, Claims,
-Boundaries, Phases, and retained lineage.
+PerishLab uses issues as the only durable work ledger and pull requests as the
+delivery projection of one bounded unit of that work. An issue owns the problem,
+outcome, acceptance, non-goals, decisions, progress, relationships, and
+completion of its work. A pull request owns the exact change and verification
+that it delivers. Product source and released records remain the authority for
+the behavior and distribution they prove.
+
+Concord is not a second project ledger. It coordinates Issue-anchored local
+execution: Members, Claims, Boundaries, private Artifacts, session activity,
+non-exclusive occupancy, and exact delivery preparation. It may project
+bounded GitHub facts for Agents, but it does not copy or own Issue narrative,
+relationships, lifecycle, or retained decisions.
 
 ## Issues
 
@@ -25,34 +32,48 @@ evidence that can exist only after merge or stable distribution. A merged pull
 request is evidence for the conditions it proves, not a substitute for the
 remaining conditions.
 
+Decisions and progress that affect the bounded outcome are recorded in the
+Issue body or timeline. Adjacent work becomes another Issue or sub-issue rather
+than an addition in a private ledger. Timeless product law belongs in judged
+source or organization policy, with its originating Issue and pull request as
+lineage.
+
 Large outcomes use parent and sub-issues. Each deliverable leaf remains
 independently closable. Exact ordering and blocking use GitHub's native issue
 dependencies; labels do not stand in for relationships.
 
-## Concord lineage
+Before closing an Issue, every acceptance checkbox is settled. When acceptance
+extends beyond the merging pull request, the Issue remains open until the
+authoritative evidence exists and a final comment records it. Historical closed
+Issues are not rewritten to satisfy a later protocol.
 
-An issue may originate from a Concord Task. When it does, record the stable
-Task identity in the issue. The Task is a temporary execution envelope; it does
-not copy the issue body, discussion, or forge timeline. Keep estate-wide
-decisions and retained execution evidence in Concord, and carry only the public
-delivery boundary into the issue.
+## Concord execution
 
-Creating an issue does not prove that its outcome was delivered. A Concord
-Task may be retired after transfer only when it retains the issue reference,
-has no remaining local responsibility, and says explicitly that the product
-gap remains open in GitHub.
+New work begins with an existing typed Issue. Concord may attach local execution
+to its stable provider identity, but that attachment introduces no Goal, Focus,
+Next, Question, Addition, Phase, dependency, active/retired state, or copied
+forge timeline.
+
+The temporary `Legacy Concord lineage` form field exists only while the v0.13
+estate is being migrated. It may name the stable identity of an existing Task;
+new work leaves it empty. The field disappears when that migration closes.
+
+Issue and pull-request observations are external facts. They do not silently
+authorize, release or remove local execution resources. Provider unavailability
+is not evidence of absence.
 
 ## Pull requests
 
 A pull request delivers one leaf issue and uses a native non-closing reference
-by default. Its body states the resulting outcome, the bounded change, and the
-verification performed. A native closing reference is used only when every
-acceptance condition is decidable and true at merge time. A pull request does
-not replace Concord Member, Claim, Boundary, Git, or repository-specific
-landing evidence.
+by default. Its body states the resulting outcome, the bounded change, the
+verification performed, and the proved write boundary. A native closing
+reference is used only when every Issue acceptance condition is decidable and
+true at merge time. A pull request does not replace Concord Member, Claim,
+Boundary, Git, or repository-specific landing evidence.
 
-Issue and pull-request observations are external facts. They do not silently
-authorize, settle, finish, release, or otherwise mutate a Concord object.
+One Issue may require more than one pull request. Each pull remains bounded to
+that Issue, and merge alone does not claim that release-dependent acceptance is
+complete.
 
 ## Distribution
 
@@ -65,9 +86,9 @@ it. Wharf records distribution and does not manage issue lifecycle.
 ## Repository defaults
 
 The issue forms and pull-request template in this repository are the PerishLab
-defaults. Product repositories do not copy or override them. A repository-level
-exception requires a change to this organization policy rather than a private
-template fork.
+defaults. Blank Issue creation is disabled. Product repositories do not copy or
+override the forms or template. A repository-level exception requires a change
+to this organization policy rather than a private template fork.
 
 Repository `AGENTS.md` files contain only product-specific constraints and
 exceptions. They do not restate this organization-wide protocol.
