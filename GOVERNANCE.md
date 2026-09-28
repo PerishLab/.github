@@ -71,6 +71,42 @@ One Issue may require more than one pull request. Each pull remains bounded to
 that Issue, and merge alone does not claim that release-dependent acceptance is
 complete.
 
+## Product guidance authorities
+
+A marker-bound product Skill is one declared by `release.skill = true`. Its new
+Depot generation contains exactly one regular file named `SKILL.md`. An
+installed managed seat contains that file and installer-owned `metadata.json`;
+no other content belongs in either shape. Historical Depot generations remain
+immutable. The singleton contract applies when consigning a new generation,
+and an upgrade removes companion files left by an earlier managed generation.
+
+`SKILL.md` is the durable entry point for a product. It names the product's
+responsibility, core objects, invariants, minimal routine flow, and routes to
+the authorities needed for further action. It does not duplicate command or
+flag catalogues, organization policy, architecture reference material,
+dynamic versions or state, or fault-scenario encyclopedias. In particular, a
+managed product Skill has no `PATHS.md`, `SCENARIOS.md`, references directory,
+or equivalent companion content.
+
+Authority is divided as follows:
+
+- the product CLI's `--help` owns current command and flag grammar;
+- a code-addressed Cookbook owns bounded recovery for complex failures;
+- repository `AGENTS.md` owns repository-specific delivery constraints;
+- this repository owns organization-wide policy;
+- judged product source and documentation own architecture; and
+- errors, status, and audit output own current operational evidence.
+
+Complex recovery uses the shared `plumb::cookbook::{Code, Entry, Cookbook}`
+contract. Every emitted reference names one exact resolvable code; deterministic
+Human and JSON presentations carry equivalent entry content. Simple errors
+remain self-contained and emit no Cookbook reference. A product with no genuine
+complex recovery exposes no empty Cookbook command or placeholder entries.
+
+This contract does not govern application, plugin, template, or domain-knowledge
+Skills that are not marker-bound product guidance. Their owning system defines
+their shape and lifecycle.
+
 ## Distribution
 
 Wharf's distribution record is the authority for how far a release marker has
