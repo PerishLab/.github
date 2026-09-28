@@ -37,13 +37,6 @@ body:
       description: State adjacent work that this issue deliberately does not absorb.
     validations:
       required: true
-  - type: input
-    id: legacy_concord_lineage
-    attributes:
-      label: Legacy Concord lineage
-      description: Migration only. Name an existing v0.13 Task identity; leave empty for new work.
-    validations:
-      required: false
   - type: markdown
     attributes:
       value: |
