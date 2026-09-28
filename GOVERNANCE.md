@@ -54,10 +54,6 @@ to its stable provider identity, but that attachment introduces no Goal, Focus,
 Next, Question, Addition, Phase, dependency, active/retired state, or copied
 forge timeline.
 
-The temporary `Legacy Concord lineage` form field exists only while the v0.13
-estate is being migrated. It may name the stable identity of an existing Task;
-new work leaves it empty. The field disappears when that migration closes.
-
 Issue and pull-request observations are external facts. They do not silently
 authorize, release or remove local execution resources. Provider unavailability
 is not evidence of absence.
