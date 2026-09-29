@@ -21,11 +21,7 @@ jobs:
           ref: ${{ github.sha }}
 
       - name: Prepare declared Rust toolchain
-        uses: actions-rust-lang/setup-rust-toolchain@a0b538fa0b742a6aa35d6e2c169b4bd06d225a98
-        with:
-          cache: false
-          matcher: false
-          rustflags: ""
+        run: rustup show active-toolchain || rustup toolchain install
 
       - name: Install Plumb v0.63.0
         uses: PerishLab/actions/setup-binary@7810d7b6f78cdde42e9d7026666e1aafb157255d
