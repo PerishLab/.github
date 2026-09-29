@@ -115,6 +115,24 @@ open until that record says the stable marker is complete. A source merge,
 release tag, workflow conclusion, or registry observation alone does not close
 it. Wharf records distribution and does not manage issue lifecycle.
 
+## Organization workflow
+
+This repository may carry organization-governance workflows selected directly
+by GitHub rulesets. Such a workflow owns only the provider trigger and the
+fixed invocation of a released control-plane command. It contains no product
+gate, repository-shape policy, release lifecycle, path filter, or target-repo
+caller.
+
+The source repository itself is outside product governance, so its copy of the
+job is skipped there. A ruleset runs the same source in the target repository's
+event context.
+
+The organization Guard workflow checks out the exact event SHA and invokes
+`plumb guard` under explicit runtime selectors. Its actions and Plumb release
+are immutable references. Its GitHub-hosted runner class is declared
+explicitly, while Guard evidence binds the actual execution world; a
+digest-pinned full-Guard image is a separately tracked enhancement.
+
 ## Repository defaults
 
 The issue forms and pull-request template in this repository are the PerishLab
@@ -127,7 +145,8 @@ exceptions. They do not restate this organization-wide protocol.
 
 ## Maintenance
 
-This repository is maintained manually. It contains no product workflow,
+This repository is maintained manually. It contains no product-local workflow,
 release lifecycle, generated projection, or Plumb configuration. GitHub owns
-issue types and relationships; this repository owns the default forms and the
-human-readable protocol they project.
+issue types and relationships; this repository owns the default forms,
+organization-governance workflow sources, and the human-readable protocol they
+project.
