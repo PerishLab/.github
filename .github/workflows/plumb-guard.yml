@@ -66,7 +66,9 @@ jobs:
         if: steps.node.outputs.pnpm != ''
         env:
           PNPM_VERSION: ${{ steps.node.outputs.pnpm }}
-        run: npm install --global "pnpm@${PNPM_VERSION}"
+        run: |
+          npm install --global --prefix "$RUNNER_TEMP/pnpm" "pnpm@${PNPM_VERSION}"
+          echo "$RUNNER_TEMP/pnpm/bin" >> "$GITHUB_PATH"
 
       - name: Grant GitHub Packages reads
         if: steps.node.outputs.pnpm != ''
