@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  packages: read
 
 jobs:
   guard:
@@ -36,6 +37,45 @@ jobs:
           PERISH_SETUP_CHANNEL: stable
           PERISH_SETUP_PRODUCT: ectropy
           PERISH_SETUP_VERSION: v0.10.0
+
+      - name: Read declared Node toolchain
+        id: node
+        run: |
+          node=""
+          pnpm=""
+          if [ -f package.json ]; then
+            node=$(jq -r '.engines.node // empty' package.json)
+            pnpm=$(jq -r '.engines.pnpm // empty' package.json)
+            if [ -z "$pnpm" ]; then
+              manager=$(jq -r '.packageManager // empty' package.json)
+              case "$manager" in
+                pnpm@*) pnpm=${manager#pnpm@}; pnpm=${pnpm%%+*} ;;
+              esac
+            fi
+          fi
+          echo "node=$node" >> "$GITHUB_OUTPUT"
+          echo "pnpm=$pnpm" >> "$GITHUB_OUTPUT"
+
+      - name: Install declared Node
+        if: steps.node.outputs.node != ''
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: ${{ steps.node.outputs.node }}
+
+      - name: Install declared pnpm
+        if: steps.node.outputs.pnpm != ''
+        env:
+          PNPM_VERSION: ${{ steps.node.outputs.pnpm }}
+        run: npm install --global "pnpm@${PNPM_VERSION}"
+
+      - name: Grant GitHub Packages reads
+        if: steps.node.outputs.pnpm != ''
+        env:
+          TOKEN: ${{ github.token }}
+        run: |
+          umask 077
+          printf '//npm.pkg.github.com/:_authToken=%s\n' "$TOKEN" > "$RUNNER_TEMP/npmrc"
+          echo "NPM_CONFIG_USERCONFIG=$RUNNER_TEMP/npmrc" >> "$GITHUB_ENV"
 
       - name: Guard
         env:
