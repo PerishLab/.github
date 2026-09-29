@@ -128,10 +128,17 @@ job is skipped there. A ruleset runs the same source in the target repository's
 event context.
 
 The organization Guard workflow checks out the exact event SHA and invokes
-`plumb guard` under explicit runtime selectors. Its actions and Plumb release
-are immutable references. Its GitHub-hosted runner class is declared
-explicitly, while Guard evidence binds the actual execution world; a
-digest-pinned full-Guard image is a separately tracked enhancement.
+`plumb guard` under explicit runtime selectors. Environment setup may prepare
+prerequisites before that invocation, but it neither selects a product gate nor
+duplicates a repository's declared tool version. A root `rust-toolchain.toml`,
+when present, remains the authority for Rust; the organization workflow merely
+hydrates it before Plumb's bounded executable probes run. Build caching remains
+under Guard rather than the setup action.
+
+Every workflow action and released product reference is immutable. The
+GitHub-hosted runner class is declared explicitly, while Guard evidence binds
+the actual execution world; a digest-pinned full-Guard image is a separately
+tracked enhancement.
 
 ## Repository defaults
 
