@@ -6,7 +6,6 @@ on:
 
 permissions:
   contents: read
-  packages: read
 
 jobs:
   guard:
@@ -73,8 +72,12 @@ jobs:
       - name: Grant GitHub Packages reads
         if: steps.node.outputs.pnpm != ''
         env:
-          TOKEN: ${{ github.token }}
+          TOKEN: ${{ secrets.PERISHLAB_PACKAGES_READ }}
         run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::PERISHLAB_PACKAGES_READ is not available to this repository"
+            exit 1
+          fi
           umask 077
           printf '//npm.pkg.github.com/:_authToken=%s\n' "$TOKEN" > "$RUNNER_TEMP/npmrc"
           echo "NPM_CONFIG_USERCONFIG=$RUNNER_TEMP/npmrc" >> "$GITHUB_ENV"
