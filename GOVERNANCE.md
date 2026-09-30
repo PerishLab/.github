@@ -142,18 +142,34 @@ for no package scope. The public Images environment itself needs no registry
 credential. Its digest advances only after Images publishes an immutable
 candidate and Rust plus pnpm/mixed canaries pass against that exact digest.
 
-The workflow pins the released Plumb and Ectropy that judge every repository.
-A stable that adds or tightens a law advances in one order: affected
-repositories are repaired first, the stable is released and installed, then
-one change here advances the pins, and the ruleset moves to that commit's SHA.
-A ruleset requires a workflow by path and SHA, so a pull request opened before
-the move needs a fresh event (push, or close and reopen); a rerun keeps its
-original workflow identity.
+The workflow installs the current Plumb and Ectropy stable rather than a
+pinned release. Guard evidence binds the Plumb and Ectropy that actually ran,
+so every commit still records exactly what judged it. A stable that tightens a
+law therefore reddens affected pull requests as soon as it is distributed;
+that is the intended signal, not a reason to pin.
 
-Every workflow action and released product reference is immutable. The
-GitHub-hosted runner class is declared explicitly, while Guard evidence binds
-the actual execution world; a digest-pinned full-Guard image is a separately
-tracked enhancement.
+A change to the required gate is complete only after one real `plumb land` on
+PerishLab/plumb succeeds under it, so the first merge to fail under a new rule
+is the rollout owner's canary rather than another session's delivery:
+
+- A ruleset or required-workflow change first targets only PerishLab/plumb.
+  After a real `plumb land` succeeds under it, it widens to its full
+  repository selection.
+- A Plumb or Ectropy stable changes the gate everywhere at once. The releaser
+  lands on PerishLab/plumb under the organization Guard right after the stable
+  is distributed; the window until that land is accepted.
+- When no Plumb change is pending, the next one to land serves as the canary.
+  The Issue carrying the change stays open until its canary pull request is
+  recorded on it.
+
+A ruleset requires a workflow by path and SHA, so a pull request opened before
+the ruleset moves needs a fresh event (push, or close and reopen); a rerun
+keeps its original workflow identity.
+
+Every workflow action reference is immutable. The GitHub-hosted runner class
+is declared explicitly, while Guard evidence binds the actual execution world;
+a digest-pinned full-Guard image is a separately tracked enhancement and bakes
+in no Plumb or Ectropy version.
 
 ## Repository defaults
 
