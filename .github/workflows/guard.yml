@@ -24,6 +24,7 @@ jobs:
 
       - name: Install Guard controls
         run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           install_control() {
             product=$1
             prefix=$2
