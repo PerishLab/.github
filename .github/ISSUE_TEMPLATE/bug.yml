@@ -6,18 +6,19 @@ body:
     attributes:
       value: |
         Describe one reproducible product contradiction. Separate unrelated symptoms into their own issues.
+        Read https://github.com/PerishLab/.github/blob/main/GOVERNANCE.md at work start and before delivery or closure.
   - type: textarea
     id: problem
     attributes:
       label: Problem
-      description: What happened, and which existing contract does it contradict?
+      description: What was directly observed, and which existing contract does it contradict? Separate inferred causes and unresolved diagnosis.
     validations:
       required: true
   - type: textarea
     id: evidence
     attributes:
       label: Evidence
-      description: Give the smallest reproduction, exact refusal, or other direct evidence.
+      description: Give the smallest reproduction, exact refusal and execution/consumer identity. Mark manual review, machine verification and unsupported inference honestly.
     validations:
       required: true
   - type: textarea
@@ -31,7 +32,7 @@ body:
     id: acceptance
     attributes:
       label: Acceptance
-      description: List every condition required to close the issue, including any post-merge or stable-release evidence.
+      description: Name the source/release endpoint, exact evidence and obligations after merge. For adopted acceptance, include current declaration-linked comment closure; a stable consumer needs inclusion/distribution and any promised installed-behavior evidence.
       placeholder: |
         - [ ] ...
         - [ ] ...
@@ -48,3 +49,4 @@ body:
     attributes:
       value: |
         After creation, use GitHub Relationships for parent, sub-issue, blocked-by, and blocking edges. Do not encode those relationships as labels.
+        Adopt acceptance:source or acceptance:release through Concord when work resumes. Keep the target label after closure; record declarations, reasoned amendments and final judgments in Concord comments, not a separate ledger.

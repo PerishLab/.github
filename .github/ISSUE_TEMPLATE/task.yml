@@ -6,6 +6,7 @@ body:
     attributes:
       value: |
         Use this type when the outcome does not introduce product behavior and is not a defect repair.
+        Read https://github.com/PerishLab/.github/blob/main/GOVERNANCE.md at work start and before delivery or closure.
   - type: textarea
     id: outcome
     attributes:
@@ -17,14 +18,14 @@ body:
     id: scope
     attributes:
       label: Scope
-      description: What exact system, repository, or operation is included?
+      description: What exact system, repository, operation and source or release/consumer endpoint are included?
     validations:
       required: true
   - type: textarea
     id: acceptance
     attributes:
       label: Acceptance
-      description: List every condition required to close the issue, including any post-merge or stable-release evidence.
+      description: Name the source/release endpoint, exact evidence and obligations after merge. For adopted acceptance, include current declaration-linked comment closure; a stable consumer needs inclusion/distribution and any promised installed-behavior evidence.
       placeholder: |
         - [ ] ...
         - [ ] ...
@@ -41,3 +42,4 @@ body:
     attributes:
       value: |
         After creation, use GitHub Relationships for parent, sub-issue, blocked-by, and blocking edges. Do not encode those relationships as labels.
+        Adopt acceptance:source or acceptance:release through Concord when work resumes. Keep the target label after closure; record declarations, reasoned amendments and final judgments in Concord comments, not a separate ledger.

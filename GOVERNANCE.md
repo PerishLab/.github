@@ -27,6 +27,11 @@ An issue states its outcome, acceptance conditions, and non-goals. A Feature
 also states the problem it addresses. A Bug states the observed behavior and
 the expected outcome. A Task states its exact scope.
 
+A Bug separates directly observed facts, inferred causes, and unresolved
+diagnosis. Name the existing contract and the exact consumer or execution
+context. An unsupported explanation is not an observed defect: reproduce or
+verify it before making that explanation the repair scope.
+
 Acceptance names every condition required to close the issue, including
 evidence that can exist only after merge or stable distribution. A merged pull
 request is evidence for the conditions it proves, not a substitute for the
@@ -46,6 +51,72 @@ Before closing an Issue, every acceptance checkbox is settled. When acceptance
 extends beyond the merging pull request, the Issue remains open until the
 authoritative evidence exists and a final comment records it. Historical closed
 Issues are not rewritten to satisfy a later protocol.
+
+## Declared acceptance and comment closure
+
+The first acceptance targets are `acceptance:source` and
+`acceptance:release`. An adopted Issue has exactly one of these labels.
+The label declares the promised endpoint; it is not progress, readiness,
+identity, or permission. Keep it after completion. Native relationships still
+own hierarchy and blocking. Consumer or deployment targets are not introduced
+in this phase.
+
+- **source** promises the repository result: the bounded change is merged and
+  the applicable checks, documentation and other source acceptance are
+  settled. It makes no claim that an installed consumer has the capability.
+- **release** includes the source result and a containing stable marker whose
+  Wharf distribution record is complete. Record how that exact marker includes
+  the change. When acceptance names an installed consumer, identify its
+  artifact/version and directly verify the promised behavior there. A newer
+  version number or a release URL alone proves neither inclusion nor usability.
+
+The target does not replace the Issue's detailed acceptance conditions. State
+the consumption endpoint, required evidence, and obligations remaining after
+merge in existing Outcome, Scope, Acceptance, or Evidence fields. For example,
+a new CLI command can be merged after the current stable tag: source delivery
+is then true, but that installed stable still lacks the command. Verify its
+release ancestry and help/behavior before diagnosing a manager defect.
+
+Concord is the operational writer for this label family and its declarations.
+Permission hardening is a separate concern; label history is observable, but
+does not by itself prove a valid declaration or closure. Preserve unrelated
+labels. Adopt an existing Issue when active work resumes, not through batch
+labeling or rewriting closed history.
+
+Declarations, amendments and closure judgments live in GitHub Issue comments.
+Reuse Concord's existing automatic session association; its execution fields
+are environment observations, not authenticated identity or authority. There
+is no second acceptance ledger. The Concord implementation owns the exact
+versioned marker grammar. It must identify the comment purpose, target,
+declaration reference, judgment and evidence references, with prose explaining
+the result. A declaration identifies itself by its provider comment identity;
+amendments and closure comments point to the declaration they evaluate.
+
+The manual closure flow is:
+
+1. Declare the target and concrete promise through Concord, retaining one
+   current declaration and the matching label.
+2. Record progress as evidence arrives without treating merge, a label or a
+   green check as completion of remaining acceptance.
+3. Amend a changed promise explicitly: reference its predecessor and explain
+   the reason. An amendment supersedes that declaration and invalidates closure
+   against it. Reopened acceptance or material expansion requires a fresh
+   review even when the label is unchanged.
+4. Review every current acceptance condition. Publish a closure judgment
+   referencing the current declaration, exact source/release/consumer evidence,
+   remaining conditions, and the strength of verification. Manual review is
+   valid in this phase when named as manual review; do not present it as an
+   automated proof.
+5. Close the Issue manually only when every condition is settled and the
+   current successful closure comment is present. Leave unmet or unknown
+   acceptance open. Automatic close/reopen is outside this phase.
+
+Label and comment writes are not a provider transaction. If one write succeeds
+and another fails, inspect the actual timeline, labels and comment identities
+before completing or correcting the operation; never blindly repeat it.
+Conflicting targets, a missing or stale declaration/closure, unsupported marker
+versions, provider failure or truncated reads are not successful closure.
+Report unmet facts separately from unknown facts.
 
 ## Concord execution
 
@@ -70,6 +141,16 @@ Boundary, Git, or repository-specific landing evidence.
 One Issue may require more than one pull request. Each pull remains bounded to
 that Issue, and merge alone does not claim that release-dependent acceptance is
 complete.
+
+For adopted acceptance, a closing reference additionally requires successful
+closure against the current declaration. Ordinary Refs pull requests may merge
+while release acceptance is outstanding; neither the label nor the checker
+turns source delivery into installed capability. Changes to a pull request's
+references or an Issue's labels, body, declarations or closure invalidate a
+stale successful check and require current evaluation. Read-only CI checks
+consume GitHub facts without local Concord execution state or session context.
+Introduce them observationally before making a narrow closing-reference check
+required, following the canary rule below.
 
 ## Product guidance authorities
 
@@ -179,7 +260,12 @@ override the forms or template. A repository-level exception requires a change
 to this organization policy rather than a private template fork.
 
 Repository `AGENTS.md` files contain only product-specific constraints and
-exceptions. They do not restate this organization-wide protocol.
+exceptions plus an explicit route to this canonical governance document. Read
+that document at work start and again before delivery or Issue closure. A root
+entry must make the route discoverable without assuming a product Skill will
+supply it. They do not copy this organization-wide protocol. If the canonical
+document cannot be read, report that missing authority rather than reconstruct
+it from memory.
 
 ## Maintenance
 
