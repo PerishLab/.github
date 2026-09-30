@@ -135,6 +135,22 @@ when present, remains the authority for Rust; the organization workflow merely
 hydrates it before Plumb's bounded executable probes run. Build caching remains
 under Guard rather than the setup action.
 
+A root `package.json` is likewise the authority for Node: the workflow installs
+exactly its `engines.node` and its `engines.pnpm` (or `packageManager`) before
+Guard runs. pnpm lives under its own prefix ahead of Node's directory, so a
+Guard step that enables corepack cannot replace the tool Guard resolved. The
+private `@perishlab` npm packages are read through the organization secret
+`PERISHLAB_PACKAGES_READ`, a classic `read:packages` token; the job token asks
+for no package scope.
+
+The workflow pins the released Plumb and Ectropy that judge every repository.
+A stable that adds or tightens a law advances in one order: affected
+repositories are repaired first, the stable is released and installed, then
+one change here advances the pins, and the ruleset moves to that commit's SHA.
+A ruleset requires a workflow by path and SHA, so a pull request opened before
+the move needs a fresh event (push, or close and reopen); a rerun keeps its
+original workflow identity.
+
 Every workflow action and released product reference is immutable. The
 GitHub-hosted runner class is declared explicitly, while Guard evidence binds
 the actual execution world; a digest-pinned full-Guard image is a separately
