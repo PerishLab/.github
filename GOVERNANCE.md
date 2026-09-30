@@ -128,20 +128,19 @@ job is skipped there. A ruleset runs the same source in the target repository's
 event context.
 
 The organization Guard workflow checks out the exact event SHA and invokes
-`plumb guard` under explicit runtime selectors. Environment setup may prepare
-prerequisites before that invocation, but it neither selects a product gate nor
-duplicates a repository's declared tool version. A root `rust-toolchain.toml`,
-when present, remains the authority for Rust; the organization workflow merely
-hydrates it before Plumb's bounded executable probes run. Build caching remains
-under Guard rather than the setup action.
+`plumb guard` under explicit runtime selectors. Its job runs in the public
+digest-pinned Images environment, so Rust, Node, pnpm, Python and the common
+tool prerequisites are fixed before the job starts. A repository's root
+`rust-toolchain.toml` and `package.json` remain the version authorities; Plumb's
+bounded executable probes refuse when the image does not satisfy them. The
+workflow neither selects a product gate nor installs a shadow toolchain. Build
+caching remains under Guard.
 
-A root `package.json` is likewise the authority for Node: the workflow installs
-exactly its `engines.node` and its `engines.pnpm` (or `packageManager`) before
-Guard runs. pnpm lives under its own prefix ahead of Node's directory, so a
-Guard step that enables corepack cannot replace the tool Guard resolved. The
-private `@perishlab` npm packages are read through the organization secret
+The private `@perishlab` npm packages are read through the organization secret
 `PERISHLAB_PACKAGES_READ`, a classic `read:packages` token; the job token asks
-for no package scope.
+for no package scope. The public Images environment itself needs no registry
+credential. Its digest advances only after Images publishes an immutable
+candidate and Rust plus pnpm/mixed canaries pass against that exact digest.
 
 The workflow pins the released Plumb and Ectropy that judge every repository.
 A stable that adds or tightens a law advances in one order: affected
