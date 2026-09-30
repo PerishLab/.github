@@ -1,4 +1,4 @@
-name: Plumb Guard
+name: Guard
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   guard:
-    name: Plumb Guard
+    name: Guard
     if: github.repository != 'PerishLab/.github'
     runs-on: ubuntu-24.04
     steps:
