@@ -6,6 +6,7 @@ body:
     attributes:
       value: |
         Keep this issue independently deliverable. Use sub-issues for a larger outcome and native dependencies for exact blocking relationships.
+        Read https://github.com/PerishLab/.github/blob/main/GOVERNANCE.md at work start and before delivery or closure.
   - type: textarea
     id: problem
     attributes:
@@ -17,14 +18,14 @@ body:
     id: outcome
     attributes:
       label: Outcome
-      description: What single observable result will be true when this issue closes?
+      description: What single observable result will be true when this issue closes, and at which source or release/consumer endpoint?
     validations:
       required: true
   - type: textarea
     id: acceptance
     attributes:
       label: Acceptance
-      description: List every condition required to close the issue, including any post-merge or stable-release evidence.
+      description: Name the source/release endpoint, exact evidence and obligations after merge. For adopted acceptance, include current declaration-linked comment closure; a stable consumer needs inclusion/distribution and any promised installed-behavior evidence.
       placeholder: |
         - [ ] ...
         - [ ] ...
@@ -41,3 +42,4 @@ body:
     attributes:
       value: |
         After creation, use GitHub Relationships for parent, sub-issue, blocked-by, and blocking edges. Do not encode those relationships as labels.
+        Adopt acceptance:source or acceptance:release through Concord when work resumes. Keep the target label after closure; record declarations, reasoned amendments and final judgments in Concord comments, not a separate ledger.
