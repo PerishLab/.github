@@ -13,7 +13,7 @@ jobs:
     if: github.repository != 'PerishLab/.github'
     runs-on: ubuntu-24.04
     container:
-      image: ghcr.io/perishlab/images@sha256:35d8fa77f3596fc405bf0e931d71cf41d1c43b4444741f870083ec9c4613aaa7
+      image: ghcr.io/perishlab/images@sha256:cca1fbfa022bc98d4241c4329bb2b18fe5841ca3302c4716c27ad1fc85a6a5f1
     steps:
       - name: Check out exact target
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
