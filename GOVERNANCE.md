@@ -221,6 +221,36 @@ open until that record says the stable marker is complete. A source merge,
 release tag, workflow conclusion, or registry observation alone does not close
 it. Wharf records distribution and does not manage issue lifecycle.
 
+## Node and pnpm
+
+The domain runs one Node and one pnpm version: Node `24.18.0` and pnpm
+`11.13.0`. Every repository with a root `package.json` declares exactly those
+versions as `engines.node` and `engines.pnpm`, with no range, and declares no
+`packageManager` field.
+
+Corepack is not used. Guard never enables it, and no workflow, container
+recipe or documentation prescribes it. pnpm is installed as a plain versioned
+tool, because a pnpm that is corepack's shim chooses its version outside the
+repository's control.
+
+A local machine installs the same versions: Node through the developer's
+version manager, and pnpm through `npm install --global pnpm@<engines.pnpm>`
+or an equivalent that does not involve corepack. Guard consumes the resolved
+tools and refuses a tool that changes during a run, so install or replace them
+while no Guard is running on that machine.
+
+A version move is a domain-wide switch, not a per-repository change. The
+organization Guard runs in one Images environment, and pnpm refuses an exact
+`engines.pnpm` it does not match, so a repository that moves alone cannot pass
+the required Guard and an environment that moves alone fails every repository.
+The environment and every repository's declaration change together, under one
+Issue.
+
+Until Plumb carries the domain versions and Doctor refuses a divergent
+declaration, this section is their single statement, and Wharf's refusal of a
+`packageManager` field or an inexact engine at release is the only mechanical
+check.
+
 ## Organization workflow
 
 This repository may carry organization-governance workflows selected directly
@@ -238,8 +268,9 @@ The organization Guard workflow checks out the exact event SHA and invokes
 digest-pinned Images environment, so Rust, Node, pnpm, Python and the common
 tool prerequisites are fixed before the job starts. A repository's root
 `rust-toolchain.toml` and `package.json` remain the version authorities; Plumb's
-bounded executable probes refuse when the image does not satisfy them. The
-workflow neither selects a product gate nor installs a shadow toolchain. Build
+bounded executable probes refuse when the image does not satisfy them. For
+Node and pnpm every such declaration carries the domain versions stated under
+"Node and pnpm". The workflow neither selects a product gate nor installs a shadow toolchain. Build
 caching remains under Guard.
 
 The private `@perishlab` npm packages are read through the organization secret
