@@ -22,19 +22,17 @@ jobs:
           persist-credentials: false
           ref: ${{ github.sha }}
 
-      - name: Install Plumb v0.64.0
+      - name: Install Plumb stable
         uses: PerishLab/actions/setup-binary@7810d7b6f78cdde42e9d7026666e1aafb157255d
         env:
           PERISH_SETUP_CHANNEL: stable
           PERISH_SETUP_PRODUCT: plumb
-          PERISH_SETUP_VERSION: v0.64.0
 
-      - name: Install Ectropy v0.11.0
+      - name: Install Ectropy stable
         uses: PerishLab/actions/setup-binary@7810d7b6f78cdde42e9d7026666e1aafb157255d
         env:
           PERISH_SETUP_CHANNEL: stable
           PERISH_SETUP_PRODUCT: ectropy
-          PERISH_SETUP_VERSION: v0.11.0
 
       - name: Grant GitHub Packages reads
         if: hashFiles('package.json') != ''
