@@ -52,6 +52,31 @@ extends beyond the merging pull request, the Issue remains open until the
 authoritative evidence exists and a final comment records it. Historical closed
 Issues are not rewritten to satisfy a later protocol.
 
+## Issue quality checks
+
+An Issue that fails a quality check carries a label in the `needs:`
+namespace, named for what it needs: `needs:<check>`. While any such label is
+present, the Issue cannot be worked: Concord refuses to start a Member on it or
+to deliver it, and names the labels. Resolving the check and removing the label
+is the only way back; the label records the finding, and removing it is the
+explicit affirmation that the finding was answered. Only the operated Issue's
+own labels count, never a parent's. Labels outside the namespace carry no such
+effect.
+
+Concord knows only this label contract. Which checks exist, when a label is
+applied and who applies it are organization policy, recorded here. The checks
+are a closed set:
+
+- `needs:revalidation`: the Issue's Member has existed for 7 days without
+  landing. Re-affirm that the outcome is still wanted and correctly bounded,
+  then remove the label; that renewal lasts until 14 days after the Member
+  started. Past 14 days the Issue is closed. Either a new Issue with a rewritten
+  body supersedes it, or the work is dropped; in both cases its branch is
+  deleted.
+
+Applying labels belongs to organization patrol, which is designed separately.
+A human may apply or resolve any check by hand with the same effect.
+
 ## Declared acceptance and comment closure
 
 The first acceptance targets are `acceptance:source` and
