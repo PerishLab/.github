@@ -221,35 +221,29 @@ open until that record says the stable marker is complete. A source merge,
 release tag, workflow conclusion, or registry observation alone does not close
 it. Wharf records distribution and does not manage issue lifecycle.
 
-## Node and pnpm
+## Tool versions
 
-The domain runs one Node and one pnpm version: Node `24.18.0` and pnpm
-`11.13.0`. Every repository with a root `package.json` declares exactly those
-versions as `engines.node` and `engines.pnpm`, with no range, and declares no
-`packageManager` field.
+Everything first-party follows its latest stable, with no exception and no
+buffer. A reference names a channel, never a version, digest or commit; what
+actually ran is recorded in the run's log and evidence.
 
-Corepack is not used. Guard never enables it, and no workflow, container
-recipe or documentation prescribes it. pnpm is installed as a plain versioned
-tool, because a pnpm that is corepack's shim chooses its version outside the
-repository's control.
+Plumb is the single source of static repository norms. Its rules and Cookbook
+are the norms, and this document only names Plumb as their source. The
+domain's Node, pnpm and Rust versions live only in Plumb: `plumb metadata`
+prints them. No repository declares a tool version, neither `engines` nor
+`packageManager` in `package.json`, nor a `rust-toolchain.toml`, and Doctor
+refuses them.
 
-A local machine installs the same versions: Node through the developer's
-version manager, and pnpm through `npm install --global pnpm@<engines.pnpm>`
-or an equivalent that does not involve corepack. Guard consumes the resolved
-tools and refuses a tool that changes during a run, so install or replace them
-while no Guard is running on that machine.
+The environment provides the domain versions. CI runs in the Images
+environment, whose recipe is proved against `plumb metadata`. A local machine installs
+them as `plumb cookbook env.toolchain-domain` describes. Corepack is not used,
+because a pnpm behind corepack's shim chooses its version outside Plumb. Doctor
+refuses an environment whose tools differ from the domain versions. Guard
+refuses a tool that changes during a run, so install or replace tools while no
+Guard is running on that machine.
 
-A version move is a domain-wide switch, not a per-repository change. The
-organization Guard runs in one Images environment, and pnpm refuses an exact
-`engines.pnpm` it does not match, so a repository that moves alone cannot pass
-the required Guard and an environment that moves alone fails every repository.
-The environment and every repository's declaration change together, under one
-Issue.
-
-Until Plumb carries the domain versions and Doctor refuses a divergent
-declaration, this section is their single statement, and Wharf's refusal of a
-`packageManager` field or an inexact engine at release is the only mechanical
-check.
+A version move is a Plumb stable that changes `plumb metadata`, followed by an
+Images stable built from it. Repositories change nothing.
 
 ## Organization workflow
 
@@ -266,12 +260,10 @@ event context.
 The organization Guard workflow checks out the exact event SHA and invokes
 `plumb guard` under explicit runtime selectors. Its job runs in the public
 Images environment `ghcr.io/perishlab/images:stable`, so Rust, Node, pnpm,
-Python and the common tool prerequisites are fixed before the job starts. A repository's root
-`rust-toolchain.toml` and `package.json` remain the version authorities; Plumb's
-bounded executable probes refuse when the image does not satisfy them. For
-Node and pnpm every such declaration carries the domain versions stated under
-"Node and pnpm". The workflow neither selects a product gate nor installs a shadow toolchain. Build
-caching remains under Guard.
+Python and the common tool prerequisites are fixed before the job starts.
+Doctor checks that they are the domain versions Plumb carries (see "Tool
+versions"). The workflow neither selects a product gate nor installs a shadow
+toolchain. Build caching remains under Guard.
 
 The private `@perishlab` npm packages are read through the organization secret
 `PERISHLAB_PACKAGES_READ`, a classic `read:packages` token; the job token asks
