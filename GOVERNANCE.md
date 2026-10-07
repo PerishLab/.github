@@ -265,8 +265,8 @@ event context.
 
 The organization Guard workflow checks out the exact event SHA and invokes
 `plumb guard` under explicit runtime selectors. Its job runs in the public
-digest-pinned Images environment, so Rust, Node, pnpm, Python and the common
-tool prerequisites are fixed before the job starts. A repository's root
+Images environment `ghcr.io/perishlab/images:stable`, so Rust, Node, pnpm,
+Python and the common tool prerequisites are fixed before the job starts. A repository's root
 `rust-toolchain.toml` and `package.json` remain the version authorities; Plumb's
 bounded executable probes refuse when the image does not satisfy them. For
 Node and pnpm every such declaration carries the domain versions stated under
@@ -276,12 +276,15 @@ caching remains under Guard.
 The private `@perishlab` npm packages are read through the organization secret
 `PERISHLAB_PACKAGES_READ`, a classic `read:packages` token; the job token asks
 for no package scope. The public Images environment itself needs no registry
-credential. Its digest advances only after Images publishes an immutable
-candidate and Rust plus pnpm/mixed canaries pass against that exact digest.
+credential. It is referenced by its `stable` tag, which Wharf moves forward
+when it distributes an Images stable; the digest a job ran is in that job's
+log.
 
-The workflow installs the current Plumb and Ectropy stable rather than a
-pinned release. Guard evidence binds the Plumb and Ectropy that actually ran,
-so every commit still records exactly what judged it. A stable that tightens a
+Everything first-party the workflow runs follows the latest stable: the
+Images environment by its `stable` tag, Plumb and Ectropy through their
+managers' stable channel. Guard evidence binds the Plumb and Ectropy that
+actually ran and the job log records the image digest, so every commit still
+records exactly what judged it. A stable that tightens a
 law therefore reddens affected pull requests as soon as it is distributed;
 that is the intended signal, not a reason to pin.
 
@@ -289,24 +292,29 @@ A change to the required gate is complete only after one real `plumb land` on
 PerishLab/plumb succeeds under it, so the first merge to fail under a new rule
 is the rollout owner's canary rather than another session's delivery:
 
-- A ruleset or required-workflow change first targets only PerishLab/plumb.
-  After a real `plumb land` succeeds under it, it widens to its full
-  repository selection.
-- A Plumb or Ectropy stable changes the gate everywhere at once. The releaser
-  lands on PerishLab/plumb under the organization Guard right after the stable
-  is distributed; the window until that land is accepted.
+- A ruleset change that can be scoped, such as its repository selection or
+  enforcement, first targets only PerishLab/plumb. After a real `plumb land`
+  succeeds under it, it widens to its full repository selection.
+- A required-workflow change applies everywhere when it merges, because the
+  ruleset requires `guard.yml` on `main`. Its author lands on PerishLab/plumb
+  under the organization Guard right after the merge.
+- A Plumb, Ectropy or Images stable changes the gate everywhere at once. The
+  releaser lands on PerishLab/plumb under the organization Guard right after
+  the stable is distributed.
+- The window between such a change and that land is accepted.
 - When no Plumb change is pending, the next one to land serves as the canary.
   The Issue carrying the change stays open until its canary pull request is
   recorded on it.
 
-A ruleset requires a workflow by path and SHA, so a pull request opened before
-the ruleset moves needs a fresh event (push, or close and reopen); a rerun
-keeps its original workflow identity.
+The ruleset requires `guard.yml` by path on `main`, without a commit SHA. A
+pull request is judged by the workflow as it stood at its latest event, so one
+opened before a workflow change needs a fresh event (push, or close and
+reopen) to be judged by the new one; a rerun keeps its original workflow.
 
-Every workflow action reference is immutable. The GitHub-hosted runner class
-is declared explicitly, while Guard evidence binds the actual execution world;
-a digest-pinned full-Guard image is a separately tracked enhancement and bakes
-in no Plumb or Ectropy version.
+Third-party references stay immutable: every action by commit SHA, and the
+GitHub-hosted runner class declared explicitly. First-party products are
+referenced by channel and never pinned; what actually ran is recorded in the
+job log and Guard evidence, not in the reference.
 
 ## Repository defaults
 
