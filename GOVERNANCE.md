@@ -22,6 +22,9 @@ matches the work:
 - **Bug** describes behavior that contradicts an existing contract.
 - **Task** delivers a bounded operational or maintenance result without adding
   a product behavior.
+- **Auto** records one registered deterministic repository-content maintenance
+  operation performed end to end by automation. People do not file their own
+  changes as Auto. Its contract is defined below.
 
 An issue states its outcome, acceptance conditions, and non-goals. A Feature
 also states the problem it addresses. A Bug states the observed behavior and
@@ -77,7 +80,81 @@ are a closed set:
 Applying labels belongs to organization patrol, which is designed separately.
 A human may apply or resolve any check by hand with the same effect.
 
+Auto bodies are accepted in the shape defined below; they do not require a
+human issue form or Concord acceptance declaration. Auto has no Member, so
+the Member-age `needs:revalidation` check does not apply. An Auto issue's own
+`needs:` labels still stop execution and delivery until the finding is resolved
+and the label removed; automation does not clear them to continue.
+
+## Automated maintenance
+
+Auto reduces friction through deterministic work: perform the registered
+operation without step-by-step approvals, make no issue or pull request when
+there is no change, and reuse existing issue, pull-request and progress state
+after interruption. Best effort stays within the operation and its registered
+paths. Retry recoverable transient failures only within finite retry and time
+bounds. Stop promptly on permission refusal, a failed Guard, an out-of-scope
+change or required human judgment. Never bypass a gate, widen scope or retry
+indefinitely to force completion.
+
+Only repository-content maintenance qualifies. Releases, rulesets and
+organization settings have external side effects and remain human work under
+ordinary issues. A person may diagnose or repair a blocker and rerun the
+operation. Business-source repairs require an ordinary issue; they do not
+become edits in the Auto operation.
+
+Each operation is registered here with its name, allowed paths and released
+command. The first registered operation is:
+
+| Operation | Allowed paths | Released command | Result |
+| --- | --- | --- | --- |
+| `follow` | Dependency manifests (`Cargo.toml`, `package.json`) and lockfiles (`Cargo.lock`, `pnpm-lock.yaml`) at the repository root or in its packages | `plumb follow` | Set requirements on crates from the `perish` registry and `@perishlab` npm packages to `0`, and resolve them to their latest stable. |
+
+`plumb lift` performs the deterministic repository edit within `follow`.
+Third-party dependencies remain governed by Plumb's lockfile norms; this
+registration authorizes no unrelated dependency upgrade or source repair.
+
+An Auto issue's body contains these fields:
+
+- **Operation:** the registered name, initially `follow`.
+- **Target:** the exact repository the operation maintains.
+- **Change:** the required result and allowed paths, with the actual bounded
+  delta reflected in the associated pull request.
+- **Acceptance:** that the bounded change is merged through the required
+  organization Guard, with the merge commit and successful Guard run recorded.
+- **Non-goals:** changes outside the registration, including business-source
+  repair, third-party upgrades, releases and organization settings.
+
+Plumb owns finding or creating the Auto issue, applying the operation on
+`auto/<number>`, verification, landing with merge readback, recovery and
+closure. Repeated execution completes remaining work without duplicating an
+issue or pull request. Every Auto change passes the required organization
+Guard. Its pull request uses a non-closing reference so that Plumb can record
+the read-back merge commit and the Guard run for the delivered change before
+closing the issue. The final comment settles the body's acceptance conditions
+and links that evidence. Auto uses this operation contract instead of
+Concord's acceptance labels, declarations and manual closure protocol.
+
+A failure leaves the issue open with the existing pull request and concrete
+failure evidence naming the stopped step and blocker. If no pull request could
+be created, record that fact rather than claiming one exists. The open issue
+is the signal to a person. Resuming does not require a scheduled backstop.
+
+Wharf triggers the released operation when a governed repository's `main`
+moves, authenticated as a GitHub App so that its pull requests trigger Guard.
+An Auto merge may trigger another run; a current repository is a no-op.
+There is no scheduled backstop or RC gate. App registration and installation
+are human operations, outside Auto.
+
+Concord displays Auto issues read-only as automation-held, including operation
+and state. It refuses attachment and Member creation. Auto branches and pull
+requests are not occupancy conflicts or audit faults for unrelated Members.
+An overlapping human Claim remains visible as a non-exclusive observation.
+
 ## Declared acceptance and comment closure
+
+This section governs ordinary issues. Auto uses the registered operation and
+evidence-based closure contract above.
 
 The first acceptance targets are `acceptance:source` and
 `acceptance:release`. An adopted Issue has exactly one of these labels.
@@ -145,7 +222,7 @@ Report unmet facts separately from unknown facts.
 
 ## Concord execution
 
-New work begins with an existing typed Issue. Concord may attach local execution
+Ordinary work begins with an existing typed Issue. Concord may attach local execution
 to its stable provider identity, but that attachment introduces no Goal, Focus,
 Next, Question, Addition, Phase, dependency, active/retired state, or copied
 forge timeline.
@@ -224,8 +301,24 @@ it. Wharf records distribution and does not manage issue lifecycle.
 ## Tool versions
 
 Everything first-party follows its latest stable, with no exception and no
-buffer. A reference names a channel, never a version, digest or commit; what
-actually ran is recorded in the run's log and evidence.
+buffer. A tool or distribution reference names a channel, never a version,
+digest or commit; what actually ran is recorded in the run's log and evidence.
+First-party package requirements use `0`; committed lockfiles remain.
+
+The organization Guard resolves first-party packages (crates from the `perish`
+registry and `@perishlab` npm packages) to their latest stable before verifying.
+A lagging first-party lock entry is not a failure; incompatibility with the
+latest stable is. Local pre-commit Guard uses the committed lock. Evidence
+declares which context ran and records the exact package versions resolved.
+An unreadable registry is unknown, never a successful verification.
+
+Wharf release builds use the same first-party resolution policy and record
+the exact versions in the distribution record. Each verification or build
+reads the current latest stable. A changed resolution before delivery requires
+fresh verification; a result for one package combination does not prove
+another. Third-party packages remain locked under Plumb's norms. `follow`
+converges committed manifests and lockfiles without making lock freshness a
+CI gate. Plumb owns the package-resolution and evidence implementation.
 
 Plumb is the single source of static repository norms. Its rules and Cookbook
 are the norms, and this document only names Plumb as their source. The
@@ -311,7 +404,9 @@ job log and Guard evidence, not in the reference.
 ## Repository defaults
 
 The issue forms and pull-request template in this repository are the PerishLab
-defaults. Blank Issue creation is disabled. Product repositories do not copy or
+defaults for human work. Auto issues are created programmatically using the
+registered body contract and have no human form. Blank Issue creation is
+disabled. Product repositories do not copy or
 override the forms or template. A repository-level exception requires a change
 to this organization policy rather than a private template fork.
 
