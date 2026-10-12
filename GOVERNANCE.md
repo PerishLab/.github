@@ -357,8 +357,9 @@ Images stable built from it. Repositories change nothing.
 ## Organization workflow
 
 This repository may carry organization-governance workflows selected directly
-by GitHub rulesets. Such a workflow owns only the provider trigger and the
-fixed invocation of a released control-plane command. It contains no product
+by GitHub rulesets. Such a workflow owns only the provider trigger, the
+fixed invocation of a released control-plane command and the publication of
+that command's own evidence. It contains no product
 gate, repository-shape policy, release lifecycle, path filter, or target-repo
 caller.
 
@@ -373,6 +374,13 @@ Python and the common tool prerequisites are fixed before the job starts.
 Doctor checks that they are the domain versions Plumb carries (see "Tool
 versions"). The workflow neither selects a product gate nor installs a shadow
 toolchain. Build caching remains under Guard.
+
+Guard runs with `--json`. Only when it succeeds, the job uploads that runtime
+document as the run artifact `guard-runtime`, so that a Wharf release plan can
+reuse the verdict for an exactly identical package combination instead of
+verifying it again. Wharf re-checks the document against the combination it
+resolves itself and remains the only writer of its records; the workflow holds
+no Wharf credential and its permissions stay `contents: read`.
 
 The private `@perishlab` npm packages are read through the organization secret
 `PERISHLAB_PACKAGES_READ`, a classic `read:packages` token; the job token asks
