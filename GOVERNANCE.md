@@ -120,8 +120,11 @@ An Auto issue's body contains these fields:
 - **Target:** the exact repository the operation maintains.
 - **Change:** the required result and allowed paths, with the actual bounded
   delta reflected in the associated pull request.
-- **Acceptance:** that the bounded change is merged through the required
-  organization Guard, with the merge commit and successful Guard run recorded.
+- **Acceptance:** that a bounded change is merged through the required
+  organization Guard, with the merge commit and successful Guard run recorded;
+  or that an existing failed preflight settles the qualified no-op below, with
+  its current main, latest-stable resolution and absence of a delivered delta
+  recorded explicitly.
 - **Non-goals:** changes outside the registration, including business-source
   repair, third-party upgrades, releases and organization settings.
 
@@ -134,6 +137,19 @@ the read-back merge commit and the Guard run for the delivered change before
 closing the issue. The final comment settles the body's acceptance conditions
 and links that evidence. Auto uses this operation contract instead of
 Concord's acceptance labels, declarations and manual closure protocol.
+
+A fresh no-op creates no issue or pull. A previously failed Auto may instead
+settle a qualified no-op when fresh latest-stable resolution produces no
+registered delta against unchanged current main and no associated pull exists.
+Any retained Auto ref must have writer-qualified publication intent proving it
+was empty against its original base; retire only that owned empty ref by exact
+identity and read back its absence before closure. Unknown, foreign, nonempty,
+unmerged or concurrently moved progress refuses. The completion records the
+repository, current main, exact resolution and ref readback, and states that no
+dependency change, pull, merge or Guard was produced. It never invents delivery
+evidence or exempts a real change from the required Guard. Plumb owns this
+completion and any migration of the active Auto body's acceptance fields;
+operators do not edit or close Auto to settle it.
 
 A failure leaves the issue open with the existing pull request and concrete
 failure evidence naming the stopped step and blocker. If no pull request could
