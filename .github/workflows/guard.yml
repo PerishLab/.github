@@ -56,4 +56,15 @@ jobs:
         env:
           PLUMB_GUARD_BOUNDARY: head
           PLUMB_GUARD_STRENGTH: full
-        run: plumb guard
+        run: |
+          status=0
+          plumb guard --json > "$RUNNER_TEMP/guard-runtime.json" || status=$?
+          cat "$RUNNER_TEMP/guard-runtime.json"
+          exit "$status"
+
+      - name: Publish Guard runtime
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: guard-runtime
+          path: ${{ runner.temp }}/guard-runtime.json
+          if-no-files-found: error
