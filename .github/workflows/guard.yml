@@ -52,9 +52,27 @@ jobs:
           printf '//npm.pkg.github.com/:_authToken=%s\n' "$TOKEN" > "$RUNNER_TEMP/npmrc"
           echo "NPM_CONFIG_USERCONFIG=$RUNNER_TEMP/npmrc" >> "$GITHUB_ENV"
 
+      - name: Locate Guard compiler cache
+        id: compiler
+        if: hashFiles('Cargo.lock') != ''
+        run: |
+          echo "path=$HOME/.plumb/cache/compiler" >> "$GITHUB_OUTPUT"
+          echo "toolchain=$(rustc -vV | sha256sum | cut -c1-16)" >> "$GITHUB_OUTPUT"
+
+      - name: Restore Guard compiler cache
+        id: restore
+        if: steps.compiler.outputs.path != ''
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ${{ steps.compiler.outputs.path }}
+          key: guard-compiler-${{ runner.os }}-${{ steps.compiler.outputs.toolchain }}-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            guard-compiler-${{ runner.os }}-${{ steps.compiler.outputs.toolchain }}-
+
       - name: Guard
         env:
           PLUMB_GUARD_BOUNDARY: head
+          PLUMB_GUARD_COMPILER_CACHE: sccache
           PLUMB_GUARD_STRENGTH: full
         run: |
           status=0
@@ -68,3 +86,10 @@ jobs:
           name: guard-runtime
           path: ${{ runner.temp }}/guard-runtime.json
           if-no-files-found: error
+
+      - name: Save Guard compiler cache
+        if: always() && steps.compiler.outputs.path != '' && steps.restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ${{ steps.compiler.outputs.path }}
+          key: ${{ steps.restore.outputs.cache-primary-key }}
