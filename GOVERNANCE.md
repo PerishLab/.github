@@ -389,8 +389,9 @@ Images stable built from it. Repositories change nothing.
 
 This repository may carry organization-governance workflows selected directly
 by GitHub rulesets. Such a workflow owns only the provider trigger, the
-fixed invocation of a released control-plane command and the publication of
-that command's own evidence. It contains no product
+fixed invocation of a released control-plane command, the publication of
+that command's own evidence and the transport of that command's own declared
+cache directories between runs. It contains no product
 gate, repository-shape policy, release lifecycle, path filter, or target-repo
 caller.
 
@@ -405,6 +406,18 @@ Python and the common tool prerequisites are fixed before the job starts.
 Doctor checks that they are the domain versions Plumb carries (see "Tool
 versions"). The workflow neither selects a product gate nor installs a shadow
 toolchain. Build caching remains under Guard.
+
+In repositories with a root `Cargo.lock`, the job enables Guard's compiler
+cache (`PLUMB_GUARD_COMPILER_CACHE=sccache`, which the Images environment
+satisfies) and carries Guard's compiler cache directory,
+`PLUMB_HOME/cache/compiler`, between runs. It restores the directory before
+Guard and saves it afterwards, under a key naming the runner OS, the Rust
+toolchain and the `Cargo.lock` contents. GitHub scopes caches to a ref, so the
+first Guard run of a pull request fills its cache and later runs of that pull
+request reuse it; no workflow fills the default branch. The workflow only
+moves the directory: Guard decides what it holds and whether it is used, sccache
+bounds it, and a missing, stale or evicted cache changes no verdict and is
+never evidence.
 
 Guard runs with `--json`. Only when it succeeds, the job uploads that runtime
 document as the run artifact `guard-runtime`, so that a Wharf release plan can
