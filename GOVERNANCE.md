@@ -195,6 +195,37 @@ a new CLI command can be merged after the current stable tag: source delivery
 is then true, but that installed stable still lacks the command. Verify its
 release ancestry and help/behavior before diagnosing a manager defect.
 
+Choose the target for the repository result the Issue owns. Native release
+evaluation reads that Issue repository's release authority and one exact stable
+distribution under it. A parent does not acquire its children's authorities;
+joining several product markers or distribution URLs is not a release proof.
+
+| Issue result | Target and evidence |
+| --- | --- |
+| A product source change | `source`, with its applicable checks, source delivery and documentation. |
+| A product capability promised on stable or an installed consumer | `release`, with its own containing exact stable, complete distribution, reviewed inclusion and any promised consumer verification. |
+| Research or maintenance in a repository without a product release | `source`, with the bounded result and detailed evidence the Issue promises. Do not add a product release solely to close the Issue. |
+| A parent coordinating several products | `source` for the coordination result, with each required leaf's own source, release and consumer obligations reviewed and recorded separately. |
+
+A source parent still owes every detailed condition it declares. It cannot
+replace an unfinished leaf's stable or installed verification with a source
+label, a merge or a collection of URLs. Its final manual review names each
+required leaf and the exact evidence that satisfies it. Required deliverables
+remain native sub-issues and must settle before parent closure. Independent
+follow-up research or implementation outside the parent's declared outcome
+keeps its own open Issue and a public reference. Explain any relationship
+correction in the timeline; do not remove required work to make closure pass.
+
+A product that will introduce its release authority may declare `release`
+before that source change lands, retaining the authority and distribution as
+remaining obligations. Current absence is not proof that the promise can never
+be met, and an unreadable provider is unknown rather than absent. A repository
+with no product release, such as this governance repository, instead chooses
+the bounded source result. Correct a mistaken target through an explicit
+amendment, preserving all detailed source, stable and consumer promises that
+remain required and invalidating the prior closure. These examples introduce
+no target, automatic lifecycle or substitute for the leaf's release evidence.
+
 Concord is the operational writer for this label family and its declarations.
 Permission hardening is a separate concern; label history is observable, but
 does not by itself prove a valid declaration or closure. Preserve unrelated
