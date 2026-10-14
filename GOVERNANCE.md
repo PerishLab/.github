@@ -108,7 +108,14 @@ command. The first registered operation is:
 
 | Operation | Allowed paths | Released command | Result |
 | --- | --- | --- | --- |
-| `follow` | Dependency manifests (`Cargo.toml`, `package.json`) and lockfiles (`Cargo.lock`, `pnpm-lock.yaml`) at the repository root or in its packages | `plumb follow` | Set requirements on crates from the `perish` registry and `@perishlab` npm packages to `0`, and resolve them to their latest stable. |
+| `follow` | Dependency manifests (`Cargo.toml`, `package.json`) and lockfiles (`Cargo.lock`, `pnpm-lock.yaml`) at the repository root or in its packages; root `plumb.toml` solely for the mechanical identity migration below | `plumb follow` | Set requirements on crates from the `perish` registry and `@perishlab` npm packages to `0`, and resolve them to their latest stable. |
+
+Follow may also move the existing `[release] product` value to `[identity] ns`
+in root `plumb.toml`. If `ns` already exists, it must have the same value.
+The product value and all unrelated configuration are preserved. Conflicting
+identities, other configuration edits and business-source changes refuse.
+This mechanical migration belongs to the registered candidate and passes the
+ordinary required organization Guard.
 
 `plumb lift` performs the deterministic repository edit within `follow`.
 Third-party dependencies remain governed by Plumb's lockfile norms; this
