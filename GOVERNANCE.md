@@ -180,7 +180,8 @@ This section governs ordinary issues. Auto uses the registered operation and
 evidence-based closure contract above.
 
 The first acceptance targets are `acceptance:source` and
-`acceptance:release`. An adopted Issue has exactly one of these labels.
+`acceptance:release`. An Issue adopted when work resumes (see below) has
+exactly one of these labels; an unadopted Issue has none.
 The label declares the promised endpoint; it is not progress, readiness,
 identity, or permission. Keep it after completion. Native relationships still
 own hierarchy and blocking. Consumer or deployment targets are not introduced
@@ -206,6 +207,8 @@ Choose the target for the repository result the Issue owns. Native release
 evaluation reads that Issue repository's release authority and one exact stable
 distribution under it. A parent does not acquire its children's authorities;
 joining several product markers or distribution URLs is not a release proof.
+This repository is the domain-wide charter: cross-product parent Issues live
+here, and the result they own is the coordination result below.
 
 | Issue result | Target and evidence |
 | --- | --- |
@@ -355,8 +358,9 @@ it. Wharf records distribution and does not manage issue lifecycle.
 ## Tool versions
 
 Everything first-party follows its latest stable, with no exception and no
-buffer. A tool or distribution reference names a channel, never a version,
-digest or commit; what actually ran is recorded in the run's log and evidence.
+buffer. A first-party tool or distribution reference names a channel, never a
+version, digest or commit (third-party references are pinned, see
+"Organization workflow"); what actually ran is recorded in the run's log and evidence.
 First-party package requirements use `0`; committed lockfiles remain.
 
 The organization Guard resolves first-party packages (crates from the `perish`
@@ -374,12 +378,9 @@ another. Third-party packages remain locked under Plumb's norms. `follow`
 converges committed manifests and lockfiles without making lock freshness a
 CI gate. Plumb owns the package-resolution and evidence implementation.
 
-Plumb is the single source of static repository norms. Its rules and Cookbook
-are the norms, and this document only names Plumb as their source. The
-domain's Node, pnpm and Rust versions live only in Plumb: `plumb metadata`
-prints them. No repository declares a tool version, neither `engines` nor
-`packageManager` in `package.json`, nor a `rust-toolchain.toml`, and Doctor
-refuses them.
+Plumb is the single source of static repository norms; its rules and Cookbook
+are the norms. The domain's Node, pnpm and Rust versions live only in Plumb
+(`plumb metadata`), and Doctor refuses repository-declared tool versions.
 
 The environment provides the domain versions. CI runs in the Images
 environment, whose recipe is proved against `plumb metadata`. A local machine installs
@@ -402,8 +403,8 @@ cache directories between runs. It contains no product
 gate, repository-shape policy, release lifecycle, path filter, or target-repo
 caller.
 
-The source repository itself is outside product governance, so its copy of the
-job is skipped there. A ruleset runs the same source in the target repository's
+This repository carries no product, so its copy of the job is skipped here;
+its Issues still follow this document. A ruleset runs the same source in the target repository's
 event context.
 
 The organization Guard workflow checks out the exact event SHA and invokes
@@ -481,9 +482,8 @@ job log and Guard evidence, not in the reference.
 The issue forms and pull-request template in this repository are the PerishLab
 defaults for human work. Auto issues are created programmatically using the
 registered body contract and have no human form. Blank Issue creation is
-disabled. Product repositories do not copy or
-override the forms or template. A repository-level exception requires a change
-to this organization policy rather than a private template fork.
+disabled. Plumb refuses repository-local forms and templates; an exception
+requires a change to this policy.
 
 Repository `AGENTS.md` files contain only product-specific constraints and
 exceptions plus an explicit route to this canonical governance document. Read
@@ -500,3 +500,7 @@ release lifecycle, generated projection, or Plumb configuration. GitHub owns
 issue types and relationships; this repository owns the default forms,
 organization-governance workflow sources, and the human-readable protocol they
 project.
+
+Wharf distributes Plumb and is therefore not governed by it: it has no Plumb
+configuration and carries its own workflows and gates, stated in its
+`AGENTS.md`. Its Issues and pull requests still follow this document.
