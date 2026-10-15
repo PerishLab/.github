@@ -503,9 +503,8 @@ project.
 
 Wharf distributes Plumb and is therefore not governed by it: it has no Plumb
 configuration and carries its own workflows and gates, stated in its
-`AGENTS.md`. Its only gate is its own `.githooks/pre-commit`, maintained in the
-Wharf repository; its workflows
-orchestrate, and Plumb only checks the shape of a declaration. The
-organization ruleset still applies to its default branch: changes arrive by
-squash pull request, without force pushes or deletion, and no status check is
-required. Its Issues and pull requests still follow this document.
+`AGENTS.md`. Its only gate is its own `.githooks/pre-commit`, maintained in
+the Wharf repository; its workflows orchestrate, and Plumb only checks the
+shape of a declaration. The organization ruleset still applies to its default
+branch: changes arrive by squash pull request, without force pushes or
+deletion, and no status check is required. Its Issues and pull requests still follow this document.
