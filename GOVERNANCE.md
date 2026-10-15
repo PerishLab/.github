@@ -507,4 +507,5 @@ configuration and carries its own workflows and gates, stated in its
 the Wharf repository; its workflows orchestrate, and Plumb only checks the
 shape of a declaration. The organization ruleset still applies to its default
 branch: changes arrive by squash pull request, without force pushes or
-deletion, and no status check is required. Its Issues and pull requests still follow this document.
+deletion, and no status check is required. Its Issues and pull requests still
+follow this document.
