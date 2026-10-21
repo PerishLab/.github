@@ -61,17 +61,7 @@ jobs:
           PLUMB_GUARD_CONTAINER: ${{ job.container.id }}
         run: |
           plumb cache transport --json > "$RUNNER_TEMP/guard-material.json"
-          jq -r '"paths<<PLUMB_PATHS\n\(.paths | join("\n"))\nPLUMB_PATHS\nkey=\(.key)\nrestore=\(.restore)\nartifact=\(.artifact)"' "$RUNNER_TEMP/guard-material.json" >> "$GITHUB_OUTPUT"
-
-      - name: Restore Guard material parcel
-        id: restore
-        if: steps.material.outputs.paths != ''
-        continue-on-error: true
-        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
-        with:
-          path: ${{ steps.material.outputs.paths }}
-          key: ${{ steps.material.outputs.key }}
-          restore-keys: ${{ steps.material.outputs.restore }}
+          jq -r '"paths<<PLUMB_PATHS\n\(.paths | join("\n"))\nPLUMB_PATHS\nartifact=\(.artifact)"' "$RUNNER_TEMP/guard-material.json" >> "$GITHUB_OUTPUT"
 
       - name: Import Guard compilation material
         if: steps.material.outputs.paths != ''
@@ -109,14 +99,6 @@ jobs:
         run: |
           plumb cache transport --save --json > "$RUNNER_TEMP/guard-material-saved.json"
           jq -r '"populated=\(.populated)"' "$RUNNER_TEMP/guard-material-saved.json" >> "$GITHUB_OUTPUT"
-
-      - name: Save Guard material parcel
-        if: steps.seal.outputs.populated == 'true' && steps.restore.outputs.cache-hit != 'true'
-        continue-on-error: true
-        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
-        with:
-          path: ${{ steps.material.outputs.paths }}
-          key: ${{ steps.material.outputs.key }}
 
       - name: Publish accepted-tree material candidate
         if: steps.seal.outputs.populated == 'true'

@@ -528,8 +528,9 @@ Source worktrees, Git administration, leases and Guard verdicts do not travel
 in this parcel. Only populated material after successful Guard is published;
 missing, rejected, stale or evicted material changes performance only.
 
-GitHub caches remain scoped to refs. A new PR may additionally fetch a successful
-canonical Guard attempt's artifact when Plumb verifies that its exact head tree
+GitHub caches remain scoped to refs. This workflow instead transports repository
+artifacts: a new PR may fetch a successful canonical Guard attempt's parcel when
+Plumb verifies that its exact head tree
 is in fetched default-branch history. This read requires `actions: read`; the
 job retains `contents: read` and has no write permission. Artifact publication
 alone establishes neither default-branch acceptance nor a current verdict.
@@ -537,6 +538,8 @@ Plumb bounds lookup/download, verifies the artifact digest and parcel, and
 isolates the read credential from repository execution and artifact storage.
 Lookup, restore and save failures leave actual Guard verification required.
 Material artifacts expire after one day; transport compression belongs to Plumb.
+The parcel is not also uploaded into Actions cache: duplicating the large
+material would add time and storage without a shared heat source for a new PR.
 No default-branch fill workflow or target-repository workflow is introduced.
 
 Guard runs with `--json`. Only when it succeeds, the job uploads that runtime
