@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   guard:
@@ -52,25 +53,37 @@ jobs:
           printf '//npm.pkg.github.com/:_authToken=%s\n' "$TOKEN" > "$RUNNER_TEMP/npmrc"
           echo "NPM_CONFIG_USERCONFIG=$RUNNER_TEMP/npmrc" >> "$GITHUB_ENV"
 
-      - name: Locate Guard compiler cache
-        id: compiler
+      - name: Declare Guard material transport
+        id: material
         if: hashFiles('Cargo.lock') != ''
+        continue-on-error: true
+        env:
+          PLUMB_GUARD_CONTAINER: ${{ job.container.id }}
         run: |
-          echo "path=$HOME/.plumb/cache/compiler" >> "$GITHUB_OUTPUT"
-          echo "toolchain=$(rustc -vV | sha256sum | cut -c1-16)" >> "$GITHUB_OUTPUT"
+          plumb cache transport --json > "$RUNNER_TEMP/guard-material.json"
+          jq -r '"paths<<PLUMB_PATHS\n\(.paths | join("\n"))\nPLUMB_PATHS\nkey=\(.key)\nrestore=\(.restore)\nartifact=\(.artifact)"' "$RUNNER_TEMP/guard-material.json" >> "$GITHUB_OUTPUT"
 
-      - name: Restore Guard compiler cache
+      - name: Restore Guard material parcel
         id: restore
-        if: steps.compiler.outputs.path != ''
+        if: steps.material.outputs.paths != ''
+        continue-on-error: true
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
-          path: ${{ steps.compiler.outputs.path }}
-          key: guard-compiler-${{ runner.os }}-${{ steps.compiler.outputs.toolchain }}-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            guard-compiler-${{ runner.os }}-${{ steps.compiler.outputs.toolchain }}-
+          path: ${{ steps.material.outputs.paths }}
+          key: ${{ steps.material.outputs.key }}
+          restore-keys: ${{ steps.material.outputs.restore }}
+
+      - name: Import Guard compilation material
+        if: steps.material.outputs.paths != ''
+        continue-on-error: true
+        env:
+          PLUMB_GUARD_CONTAINER: ${{ job.container.id }}
+          GH_TOKEN: ${{ github.token }}
+        run: plumb cache transport --restore --fetch --json
 
       - name: Guard
         env:
+          PLUMB_GUARD_CONTAINER: ${{ job.container.id }}
           PLUMB_GUARD_BOUNDARY: head
           PLUMB_GUARD_COMPILER_CACHE: sccache
           PLUMB_GUARD_STRENGTH: full
@@ -87,9 +100,31 @@ jobs:
           path: ${{ runner.temp }}/guard-runtime.json
           if-no-files-found: error
 
-      - name: Save Guard compiler cache
-        if: always() && steps.compiler.outputs.path != '' && steps.restore.outputs.cache-hit != 'true'
+      - name: Seal Guard material parcel
+        id: seal
+        if: steps.material.outputs.paths != ''
+        continue-on-error: true
+        env:
+          PLUMB_GUARD_CONTAINER: ${{ job.container.id }}
+        run: |
+          plumb cache transport --save --json > "$RUNNER_TEMP/guard-material-saved.json"
+          jq -r '"populated=\(.populated)"' "$RUNNER_TEMP/guard-material-saved.json" >> "$GITHUB_OUTPUT"
+
+      - name: Save Guard material parcel
+        if: steps.seal.outputs.populated == 'true' && steps.restore.outputs.cache-hit != 'true'
+        continue-on-error: true
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
-          path: ${{ steps.compiler.outputs.path }}
-          key: ${{ steps.restore.outputs.cache-primary-key }}
+          path: ${{ steps.material.outputs.paths }}
+          key: ${{ steps.material.outputs.key }}
+
+      - name: Publish accepted-tree material candidate
+        if: steps.seal.outputs.populated == 'true'
+        continue-on-error: true
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: ${{ steps.material.outputs.artifact }}
+          path: ${{ steps.material.outputs.paths }}
+          compression-level: 0
+          retention-days: 1
+          if-no-files-found: error
