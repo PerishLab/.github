@@ -1,17 +1,20 @@
 # Delivery governance
 
-PerishLab uses issues as the only durable work ledger and pull requests as the
-delivery projection of one bounded unit of that work. An issue owns the problem,
+PerishLab uses Issues as the durable ledger of bounded work, Projects as the
+authority for planning, and pull requests as the delivery projection of one
+bounded unit of work. An Issue owns the problem,
 outcome, acceptance, non-goals, decisions, progress, relationships, and
 completion of its work. A pull request owns the exact change and verification
 that it delivers. Product source and released records remain the authority for
-the behavior and distribution they prove.
+the behavior and distribution they prove. A Project owns candidate membership,
+priority, cycles, cycle assignments, within-cycle order, planning decisions and
+cycle review under the transition defined below.
 
-Concord is not a second project ledger. It coordinates Issue-anchored local
-execution: Members, Claims, Boundaries, private Artifacts, session activity,
-non-exclusive occupancy, and exact delivery preparation. It may project
-bounded GitHub facts for Agents, but it does not copy or own Issue narrative,
-relationships, lifecycle, or retained decisions.
+Concord provides the supported control surface for native Project planning and
+Issue-anchored execution. It coordinates local Members, Claims, Boundaries,
+private Artifacts, session activity, non-exclusive occupancy, and exact delivery
+preparation. GitHub retains native Issue and Project truth; Concord may project
+bounded current facts but does not keep a second planning or work ledger.
 
 ## Issues
 
@@ -54,6 +57,106 @@ Before closing an Issue, every acceptance checkbox is settled. When acceptance
 extends beyond the merging pull request, the Issue remains open until the
 authoritative evidence exists and a final comment records it. Historical closed
 Issues are not rewritten to satisfy a later protocol.
+
+## Project planning
+
+Project is an independent entrusted planning scope. Its goal, investment
+boundary and authority are explicit. In the first phase, the private PerishLab
+organization Project #1 is the single domain planning authority. Another
+Project or view does not acquire a competing priority or cycle authority by
+referencing the same Issue. Multi-Project authority composition is separate
+work, not an implicit inheritance rule.
+
+The user sets the goal and investment boundary. The entrusted planning agent
+may maintain candidates, priority, cycle assignments and order inside that
+scope without asking for each routine adjustment. Changing the goal or
+exceeding the entrusted boundary returns for a decision. A provider token's
+permissions describe available API access, not the scope of that delegation.
+Qualify the actual Project and each affected object before a write; a name
+match or Project membership is not authority over unrelated objects.
+
+Project planning remains distinct from product execution. Selection, priority
+and cycle membership neither authorize source or provider operations nor
+settle technical prerequisites, quality checks or acceptance. Issue owners
+maintain native parent/sub-issue and blocked-by relationships; Project consumes
+those facts. Reordering a view does not create or remove a dependency.
+
+### Planning truth
+
+Formal planning uses Project-owned fields and native item order:
+
+- Priority is Project-local: Urgent, High, Medium or Low. It expresses relative
+  importance, not progress, execution readiness or permission.
+- A native Iteration identifies a cycle and its exact interval. Assignment
+  expresses a planning choice, not an Issue deadline or completion claim.
+- Native item order expresses the specific order within a cycle. Priority,
+  cycle assignment and order remain separate decisions; views consume them.
+
+Keep unreviewed priority and unassigned cycles explicit. Adding a candidate
+does not commit work or require an invented estimate or date. Inventory current
+domain repositories and all open ordinary Issues before claiming coverage.
+Unreadable repositories, provider failure and truncated reads are unknown
+coverage, never absence. Preserve existing pilot history without backfilling
+all closed Issues. Auto Issues remain separately visible read-only observations
+and do not enter ordinary priority or cycle mutation.
+
+The Project's native description and updates retain planning choices,
+adjustment reasons and cycle review. Issue bodies and timelines retain decisions
+about their own bounded work, technical relationships, progress and acceptance.
+An Issue may deliver or review planning capability without becoming another
+candidate list or cycle ledger. Concord's local estate does not store a planning
+replica. Human edits in GitHub remain native facts and must be read again before
+Concord applies a change based on earlier observations.
+
+### Cold start and cutover
+
+The existing Issue execution and delivery mechanism bootstraps Concord's Project
+capability. Source delivery, a containing stable with complete distribution and
+actual installed capability are separate evidence. A document or source merge
+does not activate the formal planning authority.
+
+The containing stable installed Concord qualifies and migrates existing
+Project #1. Bind its identity, private visibility, field ownership, current
+values, candidates, views and automatic behavior; preserve actual history and
+peer changes. The pilot's attached organization Issue Priority and mixed
+Planning field are bootstrap input, not the formal priority/cycle model.
+Record exact cutover and independent native readback on the Project.
+
+After cutover, Project-local priority, native cycles and item order are the
+sole planning truth. Stop consuming or writing legacy Issue Priority for
+planning; do not synchronize it back from Project. Clear only exact
+pilot-written legacy values proved not to have been changed by others, with
+lineage preserved. Keep the organization field itself. Foreign or unknown
+changes require explicit resolution rather than blind clearing. Do not import
+the old report's priorities or Next selection as approved current commitments.
+
+Automatic Project behavior must be explicitly qualified against this scope.
+It must not silently close Issues, import unselected descendants, mark merge
+as acceptance, or widen a candidate selection. Pure remote Project operations
+do not require a product Member, worktree or healthy unrelated Integration;
+they do not repair or bypass Issue execution state.
+
+### First cycle and review
+
+The first formal cycle begins on the actual activation date in Asia/Shanghai
+and spans seven calendar days. Record the native Iteration identity, exact
+start/end and actual activation time at cutover; do not fabricate dates before
+activation. Its goal is to review domain candidates, make explicit tradeoffs,
+select a small current investment set and adjust from real facts.
+
+The entrusted agent maintains the Project within the agreed boundary. Another
+execution context must be able to reconstruct and consume the current
+selection and reasons from GitHub without a private planning manifest or
+additional product authority. Review the actual interval after it ends,
+recording choices, observed effects, limitations, remaining work and explicit
+next-cycle decisions. No automatic carryover or accelerated review substitutes
+for that first genuine cycle.
+
+The product capability may settle its own release/installed acceptance after
+qualified migration, activation and a real planning adjustment. The separate
+cycle-review Task and domain milestone remain open until the genuine interval
+and their detailed review conditions are settled. Selected product Issues keep
+their own obligations; a cycle ending does not close them.
 
 ## Issue quality checks
 
