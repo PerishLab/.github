@@ -502,7 +502,7 @@ This repository may carry organization-governance workflows selected directly
 by GitHub rulesets. Such a workflow owns only the provider trigger, the
 fixed invocation of a released control-plane command, the publication of
 that command's own evidence and the transport of that command's own declared
-cache directories between runs. It contains no product
+compilation-material parcels between runs. It contains no product
 gate, repository-shape policy, release lifecycle, path filter, or target-repo
 caller.
 
@@ -519,23 +519,36 @@ versions"). The workflow neither selects a product gate nor installs a shadow
 toolchain. Build caching remains under Guard.
 
 In repositories with a root `Cargo.lock`, the job enables Guard's compiler
-cache (`PLUMB_GUARD_COMPILER_CACHE=sccache`, which the Images environment
-satisfies) and carries Guard's compiler cache directory,
-`PLUMB_HOME/cache/compiler`, between runs. It restores the directory before
-Guard and saves it afterwards, under a key naming the runner OS, the Rust
-toolchain and the `Cargo.lock` contents. GitHub scopes caches to a ref, so the
-first Guard run of a pull request fills its cache and later runs of that pull
-request reuse it; no workflow fills the default branch. The workflow only
-moves the directory: Guard decides what it holds and whether it is used, sccache
-bounds it, and a missing, stale or evicted cache changes no verdict and is
-never evidence.
+cache (`PLUMB_GUARD_COMPILER_CACHE=sccache`) and uses released
+`plumb cache transport` to declare, restore and save compilation material.
+The product owns the opaque parcel, keys, identity, content validation and
+freshness; the workflow transports only its declared path. The current exact
+container ID lets Plumb independently observe and bind its immutable image.
+Source worktrees, Git administration, leases and Guard verdicts do not travel
+in this parcel. Only populated material after successful Guard is published;
+missing, rejected, stale or evicted material changes performance only.
+
+GitHub caches remain scoped to refs. This workflow instead transports repository
+artifacts: a new PR may fetch a successful canonical Guard attempt's parcel when
+Plumb verifies that its exact head tree
+is in fetched default-branch history. This read requires `actions: read`; the
+job retains `contents: read` and has no write permission. Artifact publication
+alone establishes neither default-branch acceptance nor a current verdict.
+Plumb bounds lookup/download, verifies the artifact digest and parcel, and
+isolates the read credential from repository execution and artifact storage.
+Lookup, restore and save failures leave actual Guard verification required.
+Material artifacts expire after one day; transport compression belongs to Plumb.
+The parcel is not also uploaded into Actions cache: duplicating the large
+material would add time and storage without a shared heat source for a new PR.
+No default-branch fill workflow or target-repository workflow is introduced.
 
 Guard runs with `--json`. Only when it succeeds, the job uploads that runtime
 document as the run artifact `guard-runtime`, so that a Wharf release plan can
 reuse the verdict for an exactly identical package combination instead of
 verifying it again. Wharf re-checks the document against the combination it
 resolves itself and remains the only writer of its records; the workflow holds
-no Wharf credential and its permissions stay `contents: read`.
+no Wharf credential; its read-only permissions are `contents: read` and
+`actions: read`.
 
 The private `@perishlab` npm packages are read through the organization secret
 `PERISHLAB_PACKAGES_READ`, a classic `read:packages` token; the job token asks
