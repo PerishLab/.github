@@ -593,6 +593,37 @@ GitHub-hosted runner class declared explicitly. First-party products are
 referenced by channel and never pinned; what actually ran is recorded in the
 job log and Guard evidence, not in the reference.
 
+## Integration testing
+
+PerishLab/.github#127 records this model and its phases. Every repository,
+Member and reviewer places a test by it.
+
+A repository keeps only tests that need no external service. Behavior is
+tested in-process, through the repository's own router or library over
+in-memory or file stores. Beside it stays a thin smoke layer of the
+repository's own executable: ceremonies and refusals, one served health, and
+a client that needs a real socket, which uses a listener the test holds or
+port 0. Product `src` carries no test-only switch, mode or export.
+
+Every test that needs a real service such as Postgres or an S3 store, more
+than one server process, or more than one product lives in
+`PerishLab/seatrial`. Its cases are black-box. They drive released or built
+executables only through public interfaces: HTTP, CLI, wire protocols and
+files an executable is documented to read. They never link a product crate.
+A component that must be tested this way ships an executable for it; Keel
+ships `keel-api` and `keel` for this reason.
+
+Seatrial provisions every run as a lane. Each network and volume carries
+`perish.owner` and `perish.lane`, no host port is published, an executable a
+case drives answers as `<component>.<ns>.internal` on port 8080, and teardown
+leaves nothing labelled with the run's lane. Each case gets a fresh database,
+estate file or bucket of its own; a case never resets shared state.
+
+In phase 1 the seatrial suite gates no pull, and its results are manual
+review evidence on the Issues that use them. Candidate artifacts built from
+pulls, per-repository case selection by Plumb, and gating arrive in phase 3,
+which amends this section.
+
 ## Repository defaults
 
 The issue forms and pull-request template in this repository are the PerishLab
