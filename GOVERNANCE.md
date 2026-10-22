@@ -550,6 +550,18 @@ resolves itself and remains the only writer of its records; the workflow holds
 no Wharf credential; its read-only permissions are `contents: read` and
 `actions: read`.
 
+The workflow also asks released Plumb Guard and material transport to write
+bounded diagnostic records outside the source worktree. Each invocation uses
+a new file. These reports record monotonic phase budgets, available input and
+tool identities, reuse and partial collection; they never authorize a verdict
+or material reuse. Existing suite output remains in the Job log. The separate
+`guard-diagnostic-<attempt>` artifact is published best effort after success,
+failure or cancellation, with a one-minute upload limit and fourteen-day
+retention. It does not change validation exits, required checks or permissions.
+An absent finish, missing/expired artifact or terminated runner means partial
+or unknown evidence, never a successful check. The provider's Job/step records
+remain the authority for queue, Job and upload timing and attempt association.
+
 The private `@perishlab` npm packages are read through the organization secret
 `PERISHLAB_PACKAGES_READ`, a classic `read:packages` token; the job token asks
 for no package scope. The public Images environment itself needs no registry
