@@ -38,6 +38,7 @@ jobs:
           }
           install_control plumb PLUMB
           install_control ectropy ECTROPY
+          mkdir -p "$RUNNER_TEMP/guard-diagnostics"
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
       - name: Grant GitHub Packages reads
@@ -60,7 +61,7 @@ jobs:
         env:
           PLUMB_GUARD_CONTAINER: ${{ job.container.id }}
         run: |
-          plumb cache transport --json > "$RUNNER_TEMP/guard-material.json"
+          plumb cache transport --json --diagnostic "$RUNNER_TEMP/guard-diagnostics/declare.jsonl" > "$RUNNER_TEMP/guard-material.json"
           jq -r '"paths<<PLUMB_PATHS\n\(.paths | join("\n"))\nPLUMB_PATHS\nartifact=\(.artifact)"' "$RUNNER_TEMP/guard-material.json" >> "$GITHUB_OUTPUT"
 
       - name: Import Guard compilation material
@@ -69,7 +70,7 @@ jobs:
         env:
           PLUMB_GUARD_CONTAINER: ${{ job.container.id }}
           GH_TOKEN: ${{ github.token }}
-        run: plumb cache transport --restore --fetch --json
+        run: plumb cache transport --restore --fetch --json --diagnostic "$RUNNER_TEMP/guard-diagnostics/restore.jsonl"
 
       - name: Guard
         env:
@@ -79,7 +80,7 @@ jobs:
           PLUMB_GUARD_STRENGTH: full
         run: |
           status=0
-          plumb guard --json > "$RUNNER_TEMP/guard-runtime.json" || status=$?
+          plumb guard --json --diagnostic "$RUNNER_TEMP/guard-diagnostics/guard.jsonl" > "$RUNNER_TEMP/guard-runtime.json" || status=$?
           cat "$RUNNER_TEMP/guard-runtime.json"
           exit "$status"
 
@@ -97,7 +98,7 @@ jobs:
         env:
           PLUMB_GUARD_CONTAINER: ${{ job.container.id }}
         run: |
-          plumb cache transport --save --json > "$RUNNER_TEMP/guard-material-saved.json"
+          plumb cache transport --save --json --diagnostic "$RUNNER_TEMP/guard-diagnostics/save.jsonl" > "$RUNNER_TEMP/guard-material-saved.json"
           jq -r '"populated=\(.populated)"' "$RUNNER_TEMP/guard-material-saved.json" >> "$GITHUB_OUTPUT"
 
       - name: Publish accepted-tree material candidate
@@ -110,3 +111,14 @@ jobs:
           compression-level: 0
           retention-days: 1
           if-no-files-found: error
+
+      - name: Publish Guard diagnostics
+        if: always()
+        continue-on-error: true
+        timeout-minutes: 1
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: guard-diagnostic-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/guard-diagnostics/*.jsonl
+          retention-days: 14
+          if-no-files-found: warn
