@@ -658,6 +658,23 @@ files an executable is documented to read. They never link a product crate.
 A component that must be tested this way ships an executable for it; Keel
 ships `keel-api` and `keel` for this reason.
 
+A pure public library without an executable consumer suitable for the promised
+behavior has one narrow exception. Prefer an actual consumer's public executable
+interface when it can exercise that behavior. Otherwise Seatrial may own a
+separate conformance executable that links the library solely through its public
+API. This does not permit linking ordinary product internals, private APIs or
+implementation files. The library does not gain a product CLI, API, test-only
+switch or export to serve the test. PerishLab/.github#146 records this exception.
+
+The conformance executable and assertions belong to the Seatrial scene. A run
+binds the exact library package, source and dependency resolution it tested,
+alongside the executable and real service identities. First-party package
+requirements still follow the domain's current stable policy. Candidate source
+testing is explicitly identified and follows the current candidate admission
+protocol; it never stands in for consuming the formal release package. The
+exception changes neither lane isolation and cleanup nor the current suite's
+non-gating status.
+
 Seatrial provisions every run as a lane. Each network and volume carries
 `perish.owner` and `perish.lane`, no host port is published, an executable a
 case drives answers as `<component>.<ns>.internal` on port 8080, and teardown
