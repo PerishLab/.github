@@ -638,10 +638,19 @@ GitHub-hosted runner class declared explicitly. First-party products are
 referenced by channel and never pinned; what actually ran is recorded in the
 job log and Guard evidence, not in the reference.
 
-## Integration testing
+## Guard and Windtun
 
-PerishLab/.github#127 records this model and its phases. Every repository,
-Member and reviewer places a test by it.
+Guard and Windtun address independent testing domains. Guard proves source
+closure admission: repository structure, dependencies, static constraints and
+self-contained behavior. Windtun qualifies distributed artifacts through
+integration behavior in their actual external environment. Seatrial executes
+Windtun suites; ship orchestrates them and stable promotion consumes their
+qualification evidence. These domains and their upstream and downstream checks
+together provide the workshop's quality assurance.
+
+PerishLab/.github#127 records the original test-placement model. #142 and #148
+carry its delivery and Windtun design; #149 introduces this domain contract.
+Every repository, Member and reviewer places a test by this boundary.
 
 A repository keeps only tests that need no external service. Behavior is
 tested in-process, through the repository's own router or library over
@@ -652,8 +661,8 @@ port 0. Product `src` carries no test-only switch, mode or export.
 
 Every test that needs a real service such as Postgres or an S3 store, more
 than one server process, or more than one product lives in
-`PerishLab/seatrial`. Its cases are black-box. They drive released or built
-executables only through public interfaces: HTTP, CLI, wire protocols and
+`PerishLab/seatrial`. Its Windtun cases are black-box. They drive formally
+distributed non-stable artifacts only through public interfaces: HTTP, CLI, wire protocols and
 files an executable is documented to read. They never link a product crate.
 A component that must be tested this way ships an executable for it; Keel
 ships `keel-api` and `keel` for this reason.
@@ -681,10 +690,97 @@ case drives answers as `<component>.<ns>.internal` on port 8080, and teardown
 leaves nothing labelled with the run's lane. Each case gets a fresh database,
 estate file or bucket of its own; a case never resets shared state.
 
-In phase 1 the seatrial suite gates no pull, and its results are manual
-review evidence on the Issues that use them. Candidate artifacts built from
-pulls, per-repository case selection by Plumb, and gating arrive in phase 3,
-which amends this section.
+### Product declaration and execution
+
+The product owns its Windtun requirements in its own `plumb.toml`. A top-level
+`[windtun]` table is a peer of `[guard]`; an independent testing domain does not
+create an independent configuration entrance. Plumb owns the shared declaration
+contract, parsing and static validation. Wharf consumes its normalized result
+bound to the exact source and manifest. Source Guard may validate that contract
+but never executes the published-artifact suite or adds a black-box PR wait.
+The legacy `[guard.seatrial]` form is migration input, not the domain hierarchy;
+new and legacy declarations together refuse rather than silently overriding.
+
+Scenes remain independently distributed through Depot. Seatrial follows the
+formal runner and scene channels under the current first-party policy and
+records the exact resolved identities. It provisions isolated lanes and drives
+public product artifacts without product source checkout or runtime Cargo
+builds. The narrow public-library conformance exception above retains its own
+package, program and resolution evidence. Candidate testing never substitutes
+for consuming the formal release it would qualify.
+
+Wharf starts the declared Windtun stage by default after the accurate
+non-stable distribution is ready. Ready means that the authoritative
+distribution record is complete for the exact source and publication attempt;
+a workflow title or conclusion alone proves no readiness. Windtun is a
+distinct post-distribution stage, whether composed as a job or workflow.
+Distribution completion and qualification remain separate facts. Windtun
+failure or retry does not rewrite whether the artifacts were distributed.
+
+Wharf reuses its existing workload/blob protocol for cross-job evidence.
+Each execution attempt has an immutable identity; deterministic build reuse
+does not authorize skipping a required test. Failed, cancelled and incomplete
+attempts remain evidence. Blob existence or a matching hash proves neither a
+pass nor a trusted issuer. Seatrial execution holds no publication credentials;
+the trusted control plane validates completeness and records the result.
+
+### Qualification and stable promotion
+
+Stable promotion requires a valid non-stable Windtun pass credential covering
+the content to be promoted. A pass grants qualification; it does not itself
+perform or authorize arbitrary publication. The product declares requirements,
+Seatrial executes, Wharf validates and publishes qualification evidence, and
+the promotion consumer verifies that evidence before using it.
+
+Qualification binds the actual product and service combination, declaration
+and required coverage, scene generation, runner and runtime identities,
+publication context, complete case results and successful cleanup. A
+cross-product pass proves only its recorded combination, not compatibility
+with arbitrary peers. Diagnostic subsets, missing cases or platforms,
+partial reports, cancellation, unknown cleanup, unavailable required evidence,
+wrong identity and untrusted records cannot qualify promotion. Removing a
+declaration or lacking a historical field does not create a passing exemption.
+
+Source commit equality, a version number, an OCI tag, a workflow green check,
+a run Artifact or a self-reported workload key is no substitute for the
+content association. Promotion reuses tested content and accepts only identity
+binding, signature or packaging transformations whose equivalence is proved
+for that platform and medium. Unknown differences or changed effective inputs
+require another non-stable test, not a same-source assumption. Linux evidence
+does not establish Windows, macOS or other publication-media equivalence.
+Resolved versions and digests in evidence identify what ran; they do not permit
+configuration pins that bypass the latest-stable policy.
+
+The trusted result is published under the product's existing release authority;
+complete payloads continue through the existing workload/blob mechanism.
+Discovery pointers do not replace immutable evidence references. Consumers
+check current requirements, coverage and actual input identities, refusing
+changed combinations, policy invalidation or revocation; an old green result
+does not erase a known newer failure. No arbitrary validity duration or
+flaky-test exemption is implied.
+
+Plumb provides early promotion refusal, and Wharf independently enforces the
+same qualification contract at publication boundaries. A direct dispatch or
+stable retry cannot bypass it. Publication preparation checks content
+association before irreversible writes; published readback and the final
+stable-pointer move verify the qualified references again. This promises no
+cross-registry atomic transaction.
+
+### Rollout
+
+The earlier phase-1 observational suite and phase-3 PR-candidate direction are
+historical rollout descriptions, superseded by the default non-stable-ready
+path above. Windtun does not make PRs wait. Source delivery, installed
+capability, durable qualification and enforced promotion are distinct
+acceptance obligations; a governance merge alone proves none of the latter.
+
+Implementation and enforcement expand through explicit leaves of #142 with
+their own product, platform and medium evidence and real canaries. Until the
+corresponding implementation and canary are verified, record observation as
+observation and unknown coverage as unknown; never claim the promotion gate
+is already active. Within an activated scope, qualification is mandatory,
+not an optional post-release observation. Rollout coverage does not redefine
+the target contract or turn an unsupported scope into a successful check.
 
 ## Repository defaults
 
