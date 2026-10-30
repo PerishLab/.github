@@ -782,6 +782,52 @@ is already active. Within an activated scope, qualification is mandatory,
 not an optional post-release observation. Rollout coverage does not redefine
 the target contract or turn an unsupported scope into a successful check.
 
+## Concurrency protection
+
+Execution protection is business-neutral. Radicula owns the Rust lock factories,
+scoped execution adapters, method macros and their carrier algorithms. It remains
+a strict library root; its orthogonal public capabilities do not depend on each
+other or on downstream product libraries, and share one release version.
+Callers own resource identity, lock-key/domain selection, admission policy,
+transactions, data consistency, permissions and recovery.
+
+A scoped call owns acquisition, execution and release. Success, business failure,
+panic unwinding and asynchronous cancellation must settle its local protection.
+Cleanup failure retains business output or failure and makes uncertain admission
+explicit; it must not silently permit another execution. Leases, renewal and
+fencing qualify their actual backend guarantees rather than promising rollback
+or remote write authority. Process abort or machine loss does not run language
+cleanup and needs the carrier's independently verified recovery guarantees.
+
+Retain a stable factory/gate binding for the intended concurrency domain. A new
+binding per call is not shared exclusion. Existing-file protection preserves the
+original open handle and cursor; it must not silently reopen or clone the file.
+Long-lived sessions retain their Permit/Held for the complete session, rather
+than shrinking the interval to individual IO calls. A retained File-return
+compatibility adapter states its lifetime and delegates the carrier algorithm.
+
+Typed data Mutex/RwLock remain responsible for safe mutable access. Unit payload
+alone does not prove an execution-only role: an external data or poison protocol
+can depend on that lock. Migrate only after reviewing the actual callers,
+identity, hold interval and fault contract. Cross-language consumers meet the
+same scoped-release and concurrency guarantees using their native mechanisms;
+this phase requires no Rust FFI or cross-language SDK.
+
+Native locking outside the designated carrier implementation requires an exact
+technical disposition: resolved call/type, production or test role, owning
+protocol, hold/release evidence, cfg/platform and verification. Interoperability
+fixtures, standard IO synchronization and data protection are distinct roles;
+Cargo.lock filenames or positional FileExt IO are not execution-lock findings.
+No whole-path exemption or version pin substitutes for that disposition.
+
+Inventory binds repository commit, relevant dependencies and tool identity,
+source spans, resolved or inferred type evidence, lock domain/lifetime and
+feature/target coverage. Dynamic, generated, macro-hidden or unsupported cases
+remain unknown. Inspection is not enforcement: each activated scope records its
+validated rule, distributed and installed tool, actual activation and real land
+canary. New repositories, calls, features and targets enter that coverage; an
+unread or unsupported scope is never reported as a passing global check.
+
 ## Repository defaults
 
 The issue forms and pull-request template in this repository are the PerishLab
