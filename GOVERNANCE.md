@@ -785,11 +785,22 @@ the target contract or turn an unsupported scope into a successful check.
 ## Concurrency protection
 
 Execution protection is business-neutral. Radicula owns the Rust lock factories,
-scoped execution adapters, method macros and their carrier algorithms. It remains
-a strict library root; its orthogonal public capabilities do not depend on each
-other or on downstream product libraries, and share one release version.
+scoped execution adapters, method macros and their carrier algorithms. Radicula
+remains a closed root workspace in the PerishLab library graph. Its Rust libraries
+may depend on one another as a DAG, but no library may reach another PerishLab
+product library. Public capabilities retain distinct responsibilities and share
+one release version; technical crate groups describe capabilities, not dependency
+exemptions.
 Callers own resource identity, lock-key/domain selection, admission policy,
 transactions, data consistency, permissions and recovery.
+
+The root boundary covers normal, build, dev, proc-macro, optional and platform
+branches, including paths through third-party packages and generated-code
+requirements. Internal cycles and external domain paths remain violations;
+unqualified closure evidence remains unknown. Cargo manifests own the actual
+edges. Execution of released domain CLIs for checking, delivery and distribution
+is outside the library graph. This Rust contract does not qualify unsupported
+package-manager or target coverage.
 
 A scoped call owns acquisition, execution and release. Success, business failure,
 panic unwinding and asynchronous cancellation must settle its local protection.
