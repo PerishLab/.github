@@ -49,6 +49,13 @@ than an addition in a private ledger. Timeless product law belongs in judged
 source or organization policy, with its originating Issue and pull request as
 lineage.
 
+Issue is the default complete task a top-level agent can deliver and accept
+within roughly a week or less. This is a sizing guide, not a deadline or a
+closure rule. Start with the smallest useful outcome; as information becomes
+clear, split work, establish a Project for a larger goal, narrow it or stop.
+Retain the original research, promises and explicit disposition rather than
+silently expanding one Issue.
+
 Large outcomes use parent and sub-issues. Each deliverable leaf remains
 independently closable. Exact ordering and blocking use GitHub's native issue
 dependencies; labels do not stand in for relationships.
@@ -89,12 +96,62 @@ read-only; do not bulk-classify Issues or backfill closed history.
 
 ## Project planning
 
-Project is an independent entrusted planning scope. Its goal, investment
-boundary and authority are explicit. In the first phase, the private PerishLab
-organization Project #1 is the single domain planning authority. Another
-Project or view does not acquire a competing priority or cycle authority by
-referencing the same Issue. Multi-Project authority composition is separate
-work, not an implicit inheritance rule.
+Project is an independent entrusted planning scope for a month-scale or
+longer goal, a bounded stage, or an ongoing operating domain such as
+infrastructure and maintenance. Time horizons guide granularity; they do not
+require a day/week/month hierarchy or automatic promotion. A bounded goal has
+completion and exit conditions; an ongoing domain reviews service outcomes,
+risks and maintenance burden through explicit stage goals.
+
+The first phase used private organization Project #1 as the single domain
+planning authority. Its cutover, C1/C2 choices and genuine C1 review remain
+history. Subsequent explicitly entrusted Projects may carry distinct long-term
+goals and share original Issues. Membership alone grants no competing
+planning authority, resource allocation or execution permission. Each Project
+records its goal, investment boundary and actual delegation in its native
+README and updates; broad provider credentials establish none of these.
+
+### Goals, contributions and shared work
+
+Each Project connects its desired outcomes and current evidence to its core
+gaps, stage results and selected near-term Issues. Record an unassigned gap
+explicitly rather than assuming every gap already has an Issue. A shared Issue
+may contribute differently to several Projects; local contribution and stage
+fields describe that relationship. Issue type, Phase, scope, dependencies and
+acceptance retain one native Issue truth. Project-local values must not mirror
+or redefine those facts.
+
+Local priorities, cycles and order may differ. Different values are not by
+themselves a conflict. When shared work creates incompatible scope, resource
+or delivery expectations, the entrusted planner records one reasoned
+resolution within the agreed boundaries, or returns an actual out-of-bound
+choice to the user. No implicit global ranking, priority synchronization,
+automatic carryover or cross-Project transaction is assumed. Count shared
+work once by stable Issue identity while evaluating each Project's benefit
+separately.
+
+An infrastructure delivery establishes the capability its evidence proves;
+each consuming Project separately verifies its promised adoption and outcome.
+Project reviews distinguish actual gap reduction from source completion,
+release, installation and final operational or user results. Decisions and
+reviews cite their Issue and native planning evidence. Issue counts,
+delegation success and agent activity alone prove no user benefit; review,
+restart, correction and management costs also matter.
+
+Coverage reports name their repository/Project scope, observation interval,
+pagination and unknowns. Pool absence is an observation, not a command to add
+every Issue. No current cycle, no eligible candidate and unreadable planning
+are different results; none proves that the domain has no work. Reconcile
+stale entry prose against current native facts through explicit reviewed
+changes, preserving history. A single snapshot establishes no progress trend.
+
+The already established single-Project operations remain the supported write
+boundary until each extension is qualified through its containing stable and
+actual installed consumption. Use gh or the native web interface for actions
+outside Concord's qualified capabilities, with explicit intent and readback;
+never use them to replay a Concord write with an unknown outcome or bypass an
+identity, freshness or permission refusal. Product qualification does not
+remove gh's separate role as credential and provider transport.
 
 The user sets the goal and investment boundary. The entrusted planning agent
 may maintain candidates, priority, cycle assignments and order inside that
