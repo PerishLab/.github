@@ -548,6 +548,68 @@ open until that record says the stable marker is complete. A source merge,
 release tag, workflow conclusion, or registry observation alone does not close
 it. Wharf records distribution and does not manage issue lifecycle.
 
+## Product version semantics
+
+Product versions have one meaning throughout PerishLab. Relative to the
+product's previous formal stable, a change to the boundary actually expressed
+by its schema and corresponding tests advances Y; an unchanged boundary
+advances Z. X is the user's explicit manual decision. Change size, Issue type,
+author intent and repository custom do not supply alternative meanings.
+PerishLab/.github#176 records the research and user decisions; #178 owns the
+first implementation and activation stage.
+
+Schema includes the product's expressed public interfaces, formats and behavior
+contracts. Tests express their assertions, coverage and operating conditions.
+Adding coverage for an old promise or correcting an erroneous assertion still
+advances Y when the expressed boundary changes. A repair that restores the same
+boundary advances Z. A test implementation or material refactor may retain Z
+only with an accurate unchanged-boundary judgment. Neither raw byte differences
+nor unchanged case names alone decide semantic equality.
+
+The product owns its boundary and version. Shared cases identify the products
+whose boundaries they actually verify; a preparation dependency or runtime
+fixture is not automatically a verified subject. Changing a shared Scene
+generation does not automatically advance every consumer's Y. It can still
+invalidate qualification under that consumer's existing material contract.
+
+Comparison binds the previous formal stable and the initial boundary anchor
+of its X.Y family. Every subsequent Z retains that same boundary; successive
+local reviews cannot authorize drift. Boundary observations and reviews bind
+their exact source, schema, case coverage, materials and comparison inputs.
+Missing history, unreadable material, conflicting identities or unresolved
+semantic impact remain unknown, never an empty or unchanged boundary. Removing
+a declaration or coverage cannot silently exit an activated requirement.
+Human or authorized agent review records its actual basis; mechanically
+checking that binding is not proof of arbitrary program equivalence, authentic
+review authority or user authorization for X.
+
+Beta and RC markers retain their exact candidate identities. Input changes
+require renewed judgment before distribution and promotion. The existing
+ascending-marker rule remains: when abandoning a public higher-Y candidate
+leaves no semantic Z that can exceed it, stop and record the conflict. Never
+invent a boundary change, automatically advance X or remove public material
+to evade ordering. Choose available values within the required semantic
+dimension; Y and X reset subordinate positions. Stable promotion retains its
+existing same-source and completed-prerelease requirements.
+
+These meanings do not promise API compatibility or permit estate breakage;
+the existing API/estate continuity and dependency policies remain. Version
+judgment does not replace Guard, qualification, content association, cleanup
+or distribution evidence. In particular, an unchanged boundary does not grant
+permission to reuse an invalid qualification.
+
+The semantic rule is domain-wide. Machine enforcement activates in explicit
+product/platform/medium scopes only after the matching formal producer and
+consumer, actual adoption and real positive/negative canaries are verified.
+Unactivated products follow the same rule and honest review requirements;
+unknown or incomplete coverage is not global success. First establish real
+baselines without rewriting historical releases or claiming their original
+compliance. Missing baselines do not default to either Y or Z. Plumb owns the
+shared declaration and judgment protocol, Seatrial owns tests and execution,
+and Wharf independently verifies and retains the release evidence. The first
+stage qualifies Plumb and Concord before extending the proven mechanism to
+other products and publication forms.
+
 ## Tool versions
 
 Everything first-party follows its latest stable, with no exception and no
