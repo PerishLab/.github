@@ -85,11 +85,18 @@ jobs:
           exit "$status"
 
       - name: Publish Guard runtime
+        id: runtime
+        continue-on-error: true
+        timeout-minutes: 1
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: guard-runtime
           path: ${{ runner.temp }}/guard-runtime.json
           if-no-files-found: error
+
+      - name: Report unavailable Guard runtime copy
+        if: steps.runtime.outcome == 'failure'
+        run: echo "::warning::Guard passed, but its reusable runtime copy could not be uploaded. Wharf must verify again unless another qualified record is available."
 
       - name: Seal Guard material parcel
         id: seal
