@@ -694,13 +694,22 @@ The parcel is not also uploaded into Actions cache: duplicating the large
 material would add time and storage without a shared heat source for a new PR.
 No default-branch fill workflow or target-repository workflow is introduced.
 
-Guard runs with `--json`. Only when it succeeds, the job uploads that runtime
-document as the run artifact `guard-runtime`, so that a Wharf release plan can
+Guard runs with `--json` and prints its runtime document to the Job log while
+preserving the command's exit status. Only when it succeeds, the job attempts
+to upload a reusable copy as the run artifact `guard-runtime`, so that a Wharf release plan can
 reuse the verdict for an exactly identical package combination instead of
 verifying it again. Wharf re-checks the document against the combination it
 resolves itself and remains the only writer of its records; the workflow holds
 no Wharf credential; its read-only permissions are `contents: read` and
 `actions: read`.
+
+This copy is published best effort with a one-minute upload limit. Upload
+failure is reported as a warning and does not overturn a successful Guard.
+Missing, expired, unreadable or unqualified reusable evidence grants no pass:
+without another qualified record, Wharf runs full/head Guard on its exact
+prepared snapshot. Actual Guard failure still blocks delivery. A frozen plan's
+required evidence and Wharf's authoritative plan, workload and release writes
+remain mandatory; their absence or failure never becomes a cache miss.
 
 The workflow also asks released Plumb Guard and material transport to write
 bounded diagnostic records outside the source worktree. Each invocation uses
