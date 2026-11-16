@@ -738,13 +738,27 @@ records exactly what judged it. A stable that tightens a
 law therefore reddens affected pull requests as soon as it is distributed;
 that is the intended signal, not a reason to pin.
 
-A change to the required gate is complete only after one real `plumb land` on
-PerishLab/plumb succeeds under it, so the first merge to fail under a new rule
-is the rollout owner's canary rather than another session's delivery:
+Mechanism changes to the required gate are complete only after one real
+`plumb land` on PerishLab/plumb succeeds under them, so the first merge to fail
+under a new mechanism is the rollout owner's canary rather than another
+session's delivery. Onboarding an existing rule to another repository follows
+the acceptance below.
 
-- A ruleset change that can be scoped, such as its repository selection or
-  enforcement, first targets only PerishLab/plumb. After a real `plumb land`
-  succeeds under it, it widens to its full repository selection.
+That onboarding is direct when the rule's behavior, enforcement, required
+workflow and tool parameters stay unchanged and every existing protection
+remains in force. After the rule is added, the target repository's first real
+pull request must pass the applicable checks and actually merge; that merge
+completes onboarding acceptance. It requires no Plumb change.
+
+The canary below covers mechanism changes to Guard rule behavior and
+enforcement, required workflow, and the Plumb, Ectropy and Images check
+mechanisms.
+
+- A scoped mechanism change, such as enforcement, a rule parameter or the
+  repository selection for a changed mechanism, first targets only
+  PerishLab/plumb. After a real `plumb land` succeeds under it, it widens to
+  its full repository selection. Adding a repository to an unchanged rule is
+  onboarding above.
 - A required-workflow change applies everywhere when it merges, because the
   ruleset requires `guard.yml` on `main`. Its author lands on PerishLab/plumb
   under the organization Guard right after the merge.
@@ -752,9 +766,9 @@ is the rollout owner's canary rather than another session's delivery:
   releaser lands on PerishLab/plumb under the organization Guard right after
   the stable is distributed.
 - The window between such a change and that land is accepted.
-- When no Plumb change is pending, the next one to land serves as the canary.
-  The Issue carrying the change stays open until its canary pull request is
-  recorded on it.
+- When a mechanism change has no Plumb change pending, the next one to land
+  serves as the canary. The Issue carrying the change stays open until its
+  canary pull request is recorded on it.
 
 The ruleset requires `guard.yml` by path on `main`, without a commit SHA. A
 pull request is judged by the workflow as it stood at its latest event, so one
