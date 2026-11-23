@@ -48,7 +48,7 @@ The organization-wide division of authority is the single authority. A repositor
 
 ## Words
 
-`bailiwick` names this unit. It is not the closure of acceptance: that word belongs to the explicit closure judgment on a GitHub Issue and keeps it.
+`bailiwick` names this unit; `封域` is its Chinese term. Neither is the closure of acceptance: that word belongs to the explicit closure judgment on a GitHub Issue and keeps it.
 
 ## Judging
 
