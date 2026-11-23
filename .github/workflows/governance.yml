@@ -1,0 +1,29 @@
+name: Governance
+
+on:
+  pull_request:
+  merge_group:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  governance:
+    name: Governance
+    if: github.repository == 'PerishLab/.github'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out exact target
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+          ref: ${{ github.sha }}
+
+      - name: Guard governance documents
+        run: python3 guard/governance.py --root .
+
+      - name: Prove the guard can fail
+        run: python3 guard/governance.py --selftest
