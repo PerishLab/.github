@@ -502,6 +502,8 @@ Authority is divided as follows:
 - the product CLI's `--help` owns current command and flag grammar;
 - a code-addressed Cookbook owns bounded recovery for complex failures;
 - repository `AGENTS.md` owns repository-specific delivery constraints;
+- a marker-bound product Skill owns the durable entry point and the promise a
+  product makes to its users;
 - this repository owns organization-wide policy;
 - judged product source and documentation own architecture; and
 - errors, status, and audit output own current operational evidence.
