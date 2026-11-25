@@ -626,6 +626,124 @@ Guard is running on that machine.
 A version move is a Plumb stable that changes `plumb metadata`, followed by an
 Images stable built from it. Repositories change nothing.
 
+## Bailiwick configuration and norms
+
+The PerishLab bailiwick tool-configuration roster consists of five
+repository-level surfaces: `plumb.toml`, `ectropy.toml`, `runseal.toml`,
+`locus.toml`, and `sidecar.toml`. Under the target contract, domain-wide
+repository policy and bailiwick tool defaults converge into Plumb Depot
+(`configuration`), while each governed repository carries only its single
+`plumb.toml` entry for repository identity and repository-specific values.
+Domain toolchain versions in `plumb metadata` (coupled to `Images` stable) and
+Plumb's CLI and Cookbook remain governed by "Tool versions".
+PerishLab/.github#218 records these settled decisions.
+
+External ecosystem configurations (`.cargo/config.toml`, `.npmrc`,
+`biome.json`, `.gitignore`, `.gitattributes`, `Cargo.toml`, `package.json`,
+`tsconfig.json`, `Containerfile`, and analogous tool files) and
+repository-local service or runtime configurations (`ensign.toml`,
+`codehull.toml`, and gitignored local `santi.toml`) remain outside this
+convergence. External dependencies and runtime contracts stay explicitly
+exposed at the repository root rather than hidden behind a domain wrapper.
+
+Rollout is phased and tracked in Project #7 (`PerishLab · Bailiwick
+convergence`). Existing standalone `<tool>.toml` files remain valid until the
+consuming tools ship, qualify, and retire them repository by repository. This
+charter records both current migration truth and the target contract without
+claiming rollout is complete, honoring the truth-over-intention rule in
+[governance/bailiwick.md](governance/bailiwick.md#gaps).
+
+### Floating-latest Depot configuration
+
+Current truth: Wharf Depot currently lodges only `changelog`, `skill`, and
+`scene`; Plumb `proof.depot` hashes compiled-in `crates/cli/rules`; and
+standalone `<tool>.toml` files remain active. The floating-latest Depot
+`configuration` rules below are the target contract and activate only once
+Wharf, Plumb, and Ectropy ship Depot `configuration` support and pass their
+`PerishLab/plumb` canary.
+
+Under the target contract, domain-wide repository policy and bailiwick tool
+defaults move from compiled-in Plumb release artifacts to floating-latest Plumb
+Depot `configuration` generations published at
+`channels/stable/configurations/latest.json` and lodged solely by Wharf.
+
+Both local `plumb guard` / `plumb doctor` and CI Guard are strictly
+fail-closed: an unreachable Depot, broken signature or digest, or missing
+generation is `unknown` and refuses. Neither local nor CI execution silently
+falls back to an unverified or stale cache.
+
+Guard proofs bind the exact resolved Depot generation SHA256 (`proof.depot`).
+At `plumb land` and CI time, `proof.depot` must strictly equal the current
+floating-latest `configuration` generation; if Depot advanced between local
+commit and land, Guard is re-run against the current generation, consistent
+with the no-buffer rule in "Tool versions". Within a single Wharf `ship`
+workflow, the prepared snapshot pins its resolved `configuration` generation
+across jobs so an unrelated concurrent norm publish does not split an in-flight
+release.
+
+Advancing `channels/stable/configurations/latest.json` synchronously moves
+every repository's local `plumb guard` / `plumb doctor`, `plumb land`, CI
+Guard, and standalone `ectropy .` without waiting for a Plumb or `Images`
+release, while already-prepared in-flight Wharf `ship` snapshots remain
+isolated to their pinned generation. Recovery from a damaged Depot generation
+therefore requires only an explicit Wharf rollback or re-point to an
+already-published, verified immutable generation rather than rebuilding Plumb
+or `Images`.
+
+That rollback preserves audit lineage and never constitutes version pinning:
+repositories and tools still reference only
+`channels/stable/configurations/latest.json` with no client-side digest pin,
+buffer, or fallback cache, and only Wharf mutates the authoritative channel
+pointer. Proofs produced while a damaged generation was active are neither
+silently trusted nor erased: historical records preserve their exact
+`proof.depot` SHA256, and once Wharf rolls `latest.json` back, unlanded pull
+requests holding the damaged `proof.depot` fail `plumb land` and CI equality
+and must re-run Guard against the restored generation. The separate governance
+tracks for rule retirement (#210), policy snapshot identity (#214), and
+no-buffer blast radius and damaged-stable classification (#215) retain their
+own scope and are neither contradicted nor closed by this contract.
+
+### Ectropy `singleword` and name ownership
+
+Current truth: Ectropy currently reads standalone `ectropy.toml` with
+`singleword` exemptions still active until Wharf, Plumb, and Ectropy ship Depot
+`configuration` support and pass their `PerishLab/plumb` canary. The
+zero-exception rule and Depot resolution below are the target contract.
+
+Under the target contract, Ectropy retains all existing structural, limit,
+comment, syntax grant/ban, and test-hygiene laws. For `singleword`, whitelist
+and opt-out exemptions (`[[vocabulary.term]]`, `[[boundary]] allow = ["word"]`,
+and `[word] single = false`) are retired on rollout.
+
+`singleword` follows the cross-language first principle of name ownership.
+Identifiers declared by the repository (including explicit local aliases such
+as `use a::b as foo_bar`) are strictly single-word. Import-like bindings that
+adopt or fulfill names owned by an external namespace (such as `use`/`import`
+declarations, Rust trait `impl ... for ...` member signatures, `extern` FFI
+symbols, and analogous external host or runtime contracts) lie naturally
+outside `singleword` rather than receiving whitelist exemptions.
+
+Under the target contract, effective Ectropy policy is resolved from the Plumb
+Depot `configuration` defaults combined with `[ectropy]` in `plumb.toml`.
+Standalone `ectropy .` consumes that same effective policy and is equally
+fail-closed on Depot reachability or verification failure, while `plumb guard`
+passes its resolved Depot generation into Ectropy so Guard and Ectropy judge
+the exact same snapshot without TOCTOU split-brain. `[ectropy]` in `plumb.toml`
+is bounded to repository-specific scoping, grants, and bans and cannot
+re-introduce `singleword` exemptions (`[word] single = false`,
+`[[vocabulary.term]]`, or `[[boundary]] allow = ["word"]`). Repositories exempt
+from `plumb.toml` consume Depot `configuration` defaults directly.
+
+### Canary obligation
+
+Changes to Wharf's Depot `configuration` lodging and active norm publications,
+Plumb Depot `configuration` consumption, Wharf Guard authority, and Ectropy
+`singleword` enforcement are required-gate mechanism changes. Each is governed
+by the existing `PerishLab/plumb` real `plumb land` canary rule in
+"Organization workflow", and each Issue carrying such a change remains open
+until its post-distribution `PerishLab/plumb` real `plumb land` canary pull
+request is recorded on it.
+
 ## Organization workflow
 
 This repository may carry organization-governance workflows selected directly

@@ -46,6 +46,8 @@ A gap found while advancing goes to an Issue. The charter states what is true no
 
 The organization-wide division of authority is the single authority. A repository's local surface list is a view of it, naming only the surfaces that repository actually has; any surface it omits is still governed by the organization-wide division.
 
+Repository-level bailiwick tool configuration convergence (`plumb.toml` as the single converged entry, external ecosystem and local runtime surfaces remaining outside convergence, and phased migration truth under `## Gaps`) is governed by [Bailiwick configuration and norms](../GOVERNANCE.md#bailiwick-configuration-and-norms).
+
 ## Words
 
 `bailiwick` names this unit; `封域` is its Chinese term. Neither is the closure of acceptance: that word belongs to the explicit closure judgment on a GitHub Issue and keeps it.
