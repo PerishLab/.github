@@ -1,0 +1,20 @@
+{
+  "schema": "plumb.release.successor/v1",
+  "repository": "PerishLab/plumb",
+  "repository_id": 1373877581,
+  "authority": "https://releases.plumb.perish.uk",
+  "predecessor": {
+    "marker": "v0.162.0",
+    "tag": "e221f76ac822ce4aaaeb59956d3561c03105e803",
+    "commit": "84f63bc7893ab9990eeae481cd0002bae870b25f",
+    "tree": "cb1aa1ef2afb33c0de6e263a466bc14cc2c337bd",
+    "distribution_sha256": "06e39675ba6ff553bfb1c479648f3d9786bde0a9987677181071b226674a0395",
+    "channel_sha256": "b84bf68a87491389c6d31fe7c997d66bb067550a52300d9a5fc16afde8174d05"
+  },
+  "successor": {
+    "marker": "v0.162.1",
+    "rc": "v0.162.1-rc.1",
+    "commit": "84f63bc7893ab9990eeae481cd0002bae870b25f",
+    "tree": "cb1aa1ef2afb33c0de6e263a466bc14cc2c337bd"
+  }
+}
