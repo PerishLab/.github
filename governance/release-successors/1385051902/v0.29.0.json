@@ -1,0 +1,20 @@
+{
+  "schema": "plumb.release.successor/v1",
+  "repository": "PerishLab/locus",
+  "repository_id": 1385051902,
+  "authority": "https://releases.locus.perish.uk",
+  "predecessor": {
+    "marker": "v0.28.0",
+    "tag": "651f521d031f9e6beab34f1e8b3ddd712f3236d0",
+    "commit": "27bb6b8c232ff9ca4758f970586ec72a87d180dd",
+    "tree": "1671c11f109db7c86cb824be67b5f2ccf228f576",
+    "distribution_sha256": "d976947a01295ec9c259e7ead91c4881ae394ec8abcfba32ee75e94984b15cd3",
+    "channel_sha256": "842f03ad0dc738fd4eba55cac9e5b285f116ef103bc64c96e9ff987b892c881c"
+  },
+  "successor": {
+    "marker": "v0.29.0",
+    "rc": "v0.29.0-rc.1",
+    "commit": "126eada765df8da2ccee681e40c9aa6527ceb13d",
+    "tree": "8eec3a1cd82186a39911d2d715cbcb494d36ea73"
+  }
+}
