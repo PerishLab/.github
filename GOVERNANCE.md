@@ -705,15 +705,15 @@ own scope and are neither contradicted nor closed by this contract.
 
 ### Ectropy `singleword` and name ownership
 
-Current truth: Ectropy currently reads standalone `ectropy.toml` with
-`singleword` exemptions still active until Wharf, Plumb, and Ectropy ship Depot
-`configuration` support and pass their `PerishLab/plumb` canary. The
-zero-exception rule and Depot resolution below are the target contract.
+Depot `configuration` support and unconditional `singleword` enforcement are
+now live across Wharf, Plumb (`v0.166.0+`), and Ectropy (`v0.19.0+`). Legacy
+standalone `ectropy.toml` remains supported only for transitional repositories
+that have not yet converged into `plumb.toml`.
 
-Under the target contract, Ectropy retains all existing structural, limit,
-comment, syntax grant/ban, and test-hygiene laws. For `singleword`, whitelist
-and opt-out exemptions (`[[vocabulary.term]]`, `[[boundary]] allow = ["word"]`,
-and `[word] single = false`) are retired on rollout.
+Ectropy retains all existing structural, limit, comment, syntax grant/ban, and
+test-hygiene laws. For `singleword`, whitelist and opt-out exemptions
+(`[[vocabulary.term]]`, `[[boundary]] allow = ["word"]`, and
+`[word] single = false`) are retired.
 
 `singleword` follows the cross-language first principle of name ownership.
 Identifiers declared by the repository (including explicit local aliases such
@@ -723,16 +723,16 @@ declarations, Rust trait `impl ... for ...` member signatures, `extern` FFI
 symbols, and analogous external host or runtime contracts) lie naturally
 outside `singleword` rather than receiving whitelist exemptions.
 
-Under the target contract, effective Ectropy policy is resolved from the Plumb
-Depot `configuration` defaults combined with `[ectropy]` in `plumb.toml`.
-Standalone `ectropy .` consumes that same effective policy and is equally
-fail-closed on Depot reachability or verification failure, while `plumb guard`
-passes its resolved Depot generation into Ectropy so Guard and Ectropy judge
-the exact same snapshot without TOCTOU split-brain. `[ectropy]` in `plumb.toml`
-is bounded to repository-specific scoping, grants, and bans and cannot
-re-introduce `singleword` exemptions (`[word] single = false`,
-`[[vocabulary.term]]`, or `[[boundary]] allow = ["word"]`). Repositories exempt
-from `plumb.toml` consume Depot `configuration` defaults directly.
+Effective Ectropy policy is resolved from the Plumb Depot `configuration`
+defaults combined with `[ectropy]` in `plumb.toml`. Standalone `ectropy .`
+consumes that same effective policy and is equally fail-closed on Depot
+reachability or verification failure, while `plumb guard` passes its resolved
+Depot generation into Ectropy so Guard and Ectropy judge the exact same
+snapshot without TOCTOU split-brain. `[ectropy]` in `plumb.toml` is bounded
+to repository-specific scoping, grants, and bans and cannot re-introduce
+`singleword` exemptions (`[word] single = false`, `[[vocabulary.term]]`, or
+`[[boundary]] allow = ["word"]`). Repositories exempt from `plumb.toml` consume
+Depot `configuration` defaults directly.
 
 ### Canary obligation
 
