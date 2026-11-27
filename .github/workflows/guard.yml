@@ -26,18 +26,21 @@ jobs:
       - name: Install Guard controls
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          install_control() {
-            product=$1
-            prefix=$2
-            manager="$RUNNER_TEMP/manage-$product.sh"
-            curl -fsSL "https://releases.$product.perish.uk/manage.sh" -o "$manager"
-            env \
-              "${prefix}_CHANNEL=stable" \
-              "${prefix}_VERSION=" \
-              sh "$manager" install
-          }
-          install_control plumb PLUMB
-          install_control ectropy ECTROPY
+          cat <<'EOF' > "$RUNNER_TEMP/install-control.sh"
+          #!/bin/sh
+          set -eu
+          product=$1
+          prefix=$2
+          manager="$RUNNER_TEMP/manage-$product.sh"
+          curl -fsSL "https://releases.$product.perish.uk/manage.sh" -o "$manager"
+          env \
+            "${prefix}_CHANNEL=stable" \
+            "${prefix}_VERSION=" \
+            sh "$manager" install
+          EOF
+          chmod +x "$RUNNER_TEMP/install-control.sh"
+          "$RUNNER_TEMP/install-control.sh" plumb PLUMB
+          "$RUNNER_TEMP/install-control.sh" ectropy ECTROPY
           mkdir -p "$RUNNER_TEMP/guard-diagnostics"
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
@@ -82,6 +85,14 @@ jobs:
           status=0
           plumb guard --json --diagnostic "$RUNNER_TEMP/guard-diagnostics/guard.jsonl" > "$RUNNER_TEMP/guard-runtime.json" || status=$?
           cat "$RUNNER_TEMP/guard-runtime.json"
+          if [ "$status" -ne 0 ] && jq -e '.ok == false and .code == "guard.control.rollover"' "$RUNNER_TEMP/guard-runtime.json" >/dev/null 2>&1; then
+            echo "::notice::Plumb stable channel rolled over during Guard; reinstalling controls and retrying Guard once."
+            "$RUNNER_TEMP/install-control.sh" plumb PLUMB
+            "$RUNNER_TEMP/install-control.sh" ectropy ECTROPY
+            status=0
+            plumb guard --json --diagnostic "$RUNNER_TEMP/guard-diagnostics/guard-retry.jsonl" > "$RUNNER_TEMP/guard-runtime.json" || status=$?
+            cat "$RUNNER_TEMP/guard-runtime.json"
+          fi
           exit "$status"
 
       - name: Publish Guard runtime
